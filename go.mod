@@ -1,7 +1,7 @@
 module github.com/Damillora/phoebe
 
 go 1.21.0
-toolchain go1.23.6
+toolchain go1.24.1
 
 require (
 	github.com/corona10/goimagehash v1.1.0
@@ -11,7 +11,7 @@ require (
 	github.com/go-playground/validator/v10 v10.25.0
 	github.com/google/uuid v1.6.0
 	golang.org/x/crypto v0.36.0
-	golang.org/x/image v0.24.0
+	golang.org/x/image v0.25.0
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
 )
