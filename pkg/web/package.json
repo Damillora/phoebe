@@ -18,7 +18,7 @@
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^9.21.0",
     "eslint-plugin-svelte": "^3.1.0",
-    "sass-embedded": "^1.85.0",
+    "sass-embedded": "^1.86.0",
     "svelte": "^5.25.3",
     "svelte-check": "^4.0.0",
     "svelte-tags-input": "^6.0.2",
