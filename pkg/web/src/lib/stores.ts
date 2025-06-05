@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
+import { isDesktop } from "./desktop-check";
 
 export const token = writable(
   (browser && localStorage.getItem("apiToken")) || "",
@@ -12,14 +13,14 @@ token.subscribe((value) => {
 });
 
 export const apiUrl = writable(
-  browser && window?.__TAURI__
+  browser && isDesktop()
     ? localStorage.getItem("apiUrl")
     : window.location.origin,
 );
 
 apiUrl.subscribe((value) => {
   if (value != null) {
-    if (browser && window?.__TAURI__) {
+    if (browser && isDesktop()) {
       localStorage.setItem("apiUrl", value);
     }
   }

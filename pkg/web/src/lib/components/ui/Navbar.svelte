@@ -2,7 +2,7 @@
     import logo from "$lib/assets/phoebe-logo.svg";
     import { token } from "$lib/stores";
     import { isTokenExpired, getUsernameFromToken } from "$lib/login-check";
-
+    import { isDesktop } from "$lib/desktop-check";
     let menu_shown = $state(false);
 
     let loggedIn = $state(false);
@@ -15,6 +15,8 @@
     const toggleMenu = () => {
         menu_shown = !menu_shown;
     };
+
+    let is_desktop = isDesktop();
 </script>
 
 <nav class="navbar is-primary" aria-label="main navigation">
@@ -50,13 +52,8 @@
         </div>
 
         <div class="navbar-end">
-            <div
-                class="navbar-item has-dropdown is-hoverable"
-            >
-                <a
-                    href={"#"}
-                    class="navbar-link"
-                >
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a href={"#"} class="navbar-link">
                     {loggedIn ? username : "Guest"}
                 </a>
                 {#if loggedIn}
@@ -68,14 +65,25 @@
                             Change Password
                         </a>
                         <hr class="navbar-divider" />
+                        {#if is_desktop}
+                            <a href="/desktop/settings" class="navbar-item"
+                                >Desktop Settings</a
+                            >
+                        {/if}
                         <a href="/auth/logout" class="navbar-item">Log out</a>
                     </div>
                 {:else}
-                    <div class="navbar-dropdown">
+                    <div class="navbar-dropdown is-right">
                         <a href="/auth/register" class="navbar-item">
                             Register
                         </a>
                         <a href="/auth/login" class="navbar-item">Log in</a>
+                        <hr class="navbar-divider" />
+                        {#if is_desktop}
+                            <a href="/desktop/settings" class="navbar-item"
+                                >Desktop Settings</a
+                            >
+                        {/if}
                     </div>
                 {/if}
             </div>

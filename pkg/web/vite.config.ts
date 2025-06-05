@@ -13,7 +13,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": "http://localhost:8080",
+      "/api": "https://booru.nanao.moe",
+      "/data": "https://booru.nanao.moe",
     },
   },
 });
