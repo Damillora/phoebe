@@ -1,8 +1,11 @@
-import { token } from "./stores.js"
+import { apiUrl, token } from "./stores.js"
 import { browser } from "$app/environment";
 import axios from "axios";
 
 let url = browser && window.location.origin || "";
+apiUrl.subscribe(value => {
+  url = value;
+})
 let current_token;
 token.subscribe(value => {
     current_token = value;
