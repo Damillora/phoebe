@@ -36,7 +36,7 @@ func Start() {
 
 	g.NoRoute(func(c *gin.Context) {
 		//c.String(http.StatusOK, "AAA")
-		c.FileFromFS("./app.html", http.FS(webFS))
+		c.FileFromFS("./index.html", http.FS(webFS))
 	})
 	g.StaticFS("/_app", http.FS(webAssets))
 	g.Static("/data", config.CurrentConfig.DataDirectory)
