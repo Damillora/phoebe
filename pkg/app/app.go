@@ -38,6 +38,9 @@ func Start() {
 		//c.String(http.StatusOK, "AAA")
 		c.FileFromFS("./index.html", http.FS(webFS))
 	})
+	g.GET("/index.html", func(c *gin.Context) {
+		c.FileFromFS("./index.html", http.FS(webFS))
+	})
 	g.StaticFS("/_app", http.FS(webAssets))
 	g.Static("/data", config.CurrentConfig.DataDirectory)
 	g.Use(cors.Default())
