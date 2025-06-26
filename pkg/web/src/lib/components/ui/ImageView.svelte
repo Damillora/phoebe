@@ -11,7 +11,7 @@
 
     onMount(() => {
         const img = new Image();
-        img.src = src;
+        img.src = url + src;
         loading = true;
 
         img.onload = () => {
@@ -23,6 +23,8 @@
             failed = true;
         };
     });
+
+    console.log(url);
 </script>
 
 {#if !failed}
