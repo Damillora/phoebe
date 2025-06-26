@@ -11,10 +11,4 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    proxy: {
-      "/api": "https://booru.nanao.moe",
-      "/data": "https://booru.nanao.moe",
-    },
-  },
 });
