@@ -10,7 +10,7 @@
 
     import { page } from "$app/stores";
     import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
-    let { tag } = $state($page.params);
+    let { tag } = $page.params;
 
     let data = $state();
     let posts = $state([]);
@@ -60,24 +60,27 @@
                         <ViewTagPanel {tag} {data} />
                     </div>
                     {#if renameMenuShown}
-                    <div class="block">
-                        <EditTagPanel
-                            {tag}
-                            {data}
-                            {toggleRenameMenu}
-                            onSubmit={onTagSubmit}
-                        />
-                    </div>
-                    {:else}
-                    <AuthCheck>
-                        <div class="panel is-info">
-                            <div class="panel-heading">Tag Actions</div>
-                            <a class="panel-block" href="/posts?tags={tag}">Browse Posts</a>
-                            <a onclick={toggleRenameMenu} class="panel-block"
-                                >Rename</a
-                            >
+                        <div class="block">
+                            <EditTagPanel
+                                {tag}
+                                {data}
+                                {toggleRenameMenu}
+                                onSubmit={onTagSubmit}
+                            />
                         </div>
-                    </AuthCheck>
+                    {:else}
+                        <AuthCheck>
+                            <div class="panel is-info">
+                                <div class="panel-heading">Tag Actions</div>
+                                <a class="panel-block" href="/posts?tags={tag}"
+                                    >Browse Posts</a
+                                >
+                                <a
+                                    onclick={toggleRenameMenu}
+                                    class="panel-block">Rename</a
+                                >
+                            </div>
+                        </AuthCheck>
                     {/if}
                 {:else}
                     <div class="skeleton-block"></div>
