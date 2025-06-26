@@ -86,7 +86,6 @@
     const onSubmit = async (e) => {
         e.preventDefault();
         uploading = true;
-        if (similarLoading) return;
         var blobResponse = await uploadBlob({ file, onProgress });
         form.blob_id = blobResponse.id;
         const response = await postCreate(form);
@@ -184,7 +183,8 @@
                             <button
                                 type="submit"
                                 class="button is-primary is-fullwidth is-outlined"
-                                disabled={uploading}>Submit</button
+                                disabled={uploading || similarLoading}
+                                >Submit</button
                             >
                         </div>
                     </form>
