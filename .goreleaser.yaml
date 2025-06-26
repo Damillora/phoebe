@@ -53,6 +53,7 @@ changelog:
       - "^Merge branch"
 
 release:
+  draft: true
   header: >-
     # Version v{{.Version}} "{{ .Env.RELEASE_CODENAME }} - {{ .Env.RELEASE_SUBTITLE }}"
 
