@@ -60,6 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_CODENAME: ${{ vars.RELEASE_CODENAME }}
           RELEASE_SUBTITLE: ${{ vars.RELEASE_SUBTITLE }}
+          RELEASE_QUOTE: ${{ vars.RELEASE_QUOTE }}
   tauri:
     permissions:
       contents: write
