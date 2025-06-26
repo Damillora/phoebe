@@ -1,16 +1,26 @@
 <script>
-    import { uploadBlob, postCreate, getTagAutocomplete } from "$lib/api";
+    import {
+        uploadBlob,
+        postCreate,
+        getTagAutocomplete,
+        searchBlob,
+    } from "$lib/api";
     import { goto } from "$app/navigation";
     import Tags from "svelte-tags-input";
     import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
     import ImageView from "$lib/components/ui/ImageView.svelte";
+    import ImageViewLocal from "$lib/components/ui/ImageViewLocal.svelte";
 
     let currentProgress = $state(0);
+    let similarityProgress = $state(0);
 
     let fileName = $state("");
+    let file = $state();
+    let contentsUrl = $state("");
     let similar = $state([]);
-    let previewUrl = $state("");
     let loading = $state(false);
+    let uploading = $state(false);
+    let similarLoading = $state(false);
 
     let form = $state({
         blob_id: "",
@@ -18,29 +28,50 @@
         tags: [],
     });
 
+    const onPaste = async (e) => {
+        if (e.clipboardData.files[0]) {
+            loading = true;
+            file = e.clipboardData.files[0];
+            fileName = "";
+            similar = [];
+            await handleFileChange();
+        }
+    };
     const onProgress = (e) => {
         var percentCompleted = Math.round((e.loaded * 100) / e.total);
         currentProgress = percentCompleted;
     };
-
+    const onSimilarityProgress = (e) => {
+        var percentCompleted = Math.round((e.loaded * 100) / e.total);
+        similarityProgress = percentCompleted;
+    };
     const onFileChange = async (e) => {
         loading = true;
-        var file = e.target.files[0];
+        file = e.target.files[0];
         fileName = "";
-        previewUrl = "";
         similar = [];
+        await handleFileChange();
+    };
+
+    const handleFileChange = async () => {
         if (file) {
-            var response = await uploadBlob({ file, onProgress });
-            if (response.similar) {
-                fileName = "";
-                previewUrl = "";
-                similar = response.similar;
-            }
-            form.blob_id = response.id;
+            similarLoading = true;
             fileName = file.name;
-            previewUrl = response.previewUrl;
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                contentsUrl = reader.result ?? "";
+                loading = false;
+            });
+            reader.readAsDataURL(file);
+            var similarResponse = await searchBlob({
+                file,
+                onProgress: onSimilarityProgress,
+            });
+            if (similarResponse.similar) {
+                similar = similarResponse.similar;
+            }
+            similarLoading = false;
         }
-        loading = false;
     };
 
     const onTagChange = (value) => {
@@ -54,7 +85,12 @@
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        uploading = true;
+        if (similarLoading) return;
+        var blobResponse = await uploadBlob({ file, onProgress });
+        form.blob_id = blobResponse.id;
         const response = await postCreate(form);
+        uploading = false;
         goto(`/post/${response.id}`);
     };
 </script>
@@ -81,14 +117,12 @@
                                                     id="file"
                                                     class="file-input"
                                                     type="file"
-                                                    name="resume"
                                                     onchange={onFileChange}
                                                 />
                                                 <span class="file-cta">
-                                                    <span class="file-icon"
-                                                    ></span>
                                                     <span class="file-label">
-                                                        Choose a file…
+                                                        Choose a file or paste
+                                                        your image...
                                                     </span>
                                                 </span>
                                             </label>
@@ -150,7 +184,7 @@
                             <button
                                 type="submit"
                                 class="button is-primary is-fullwidth is-outlined"
-                                >Submit</button
+                                disabled={uploading}>Submit</button
                             >
                         </div>
                     </form>
@@ -159,10 +193,13 @@
             <div class="column is-two-thirds">
                 <div class="block">
                     {#if fileName}
-                        {#if similar.length > 0}
+                        {#if similarLoading}
+                            <div class="notification is-info">
+                                Searching for similar images...
+                            </div>
+                        {:else if similar.length > 0}
                             <div class="notification is-warning">
-                                {fileName} has been succesfully uploaded. There are
-                                similar images existing:
+                                There are similar images existing:
                                 {#each similar as post, i}
                                     <a href="/post/{post.id}">{post.id}</a>
                                     {#if i < similar.length - 1}
@@ -172,7 +209,7 @@
                             </div>
                         {:else}
                             <div class="notification is-success">
-                                {fileName} has been succesfully uploaded.
+                                No similar images found.
                             </div>
                         {/if}
                     {:else if currentProgress > 0 && currentProgress < 100}
@@ -181,14 +218,14 @@
                         </div>
                     {:else}
                         <div class="notification is-primary">
-                            Your image will appear here when you upload it.
+                            Your image preview will appear here.
                         </div>
                     {/if}
                 </div>
                 {#if fileName}
                     <div class="box">
                         <figure class="image">
-                            <ImageView alt={fileName} src={previewUrl} />
+                            <ImageViewLocal alt={fileName} src={contentsUrl} />
                         </figure>
                     </div>
                 {:else if loading && !(currentProgress > 0 && currentProgress < 100)}
@@ -198,3 +235,5 @@
         </div>
     </div>
 </section>
+
+<svelte:window onpaste={onPaste} />
