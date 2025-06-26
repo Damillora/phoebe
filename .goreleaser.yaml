@@ -57,9 +57,9 @@ release:
     # Version v{{.Version}} "{{ .Env.RELEASE_CODENAME }} - {{ .Env.RELEASE_SUBTITLE }}"
 
     ---
-    
+
   footer: >-
 
     ---
 
-    Bluebird, be my salvation.
+    {{ .Env.RELEASE_QUOTE }}
