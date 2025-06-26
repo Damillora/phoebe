@@ -98,8 +98,6 @@ func uploadBlob(c *gin.Context) {
 	}
 	hashInt := hash.GetHash()
 
-	similarPosts, err := services.SimilaritySearch(hashInt)
-
 	hashSlice := make([]byte, 8)
 	binary.LittleEndian.PutUint64(hashSlice, hashInt)
 
@@ -184,23 +182,12 @@ func uploadBlob(c *gin.Context) {
 
 	database.DB.Create(&blob)
 
-	if len(similarPosts) > 0 {
-		c.JSON(http.StatusOK,
-			models.BlobSimilarResponse{
-				ID:         id,
-				Width:      width,
-				Height:     height,
-				PreviewUrl: "/data/" + blob.PreviewFilePath,
-				Similar:    similarPosts,
-			})
-	} else {
-		c.JSON(http.StatusOK, models.BlobResponse{
-			ID:         id,
-			Width:      width,
-			Height:     height,
-			PreviewUrl: "/data/" + blob.PreviewFilePath,
-		})
-	}
+	c.JSON(http.StatusOK, models.BlobResponse{
+		ID:         id,
+		Width:      width,
+		Height:     height,
+		PreviewUrl: "/data/" + blob.PreviewFilePath,
+	})
 	return
 }
 
