@@ -30,10 +30,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@tauri-apps/plugin-http": "2.2.0",
-    "axios": "^1.4.0",
-    "axios-tauri-api-adapter": "^2.0.6",
-    "bulma": "^1.0.3",
+    "@tauri-apps/plugin-http": "^2.4.0",
+    "bulma": "^1.0.3",  
     "child_process": "^1.0.2",
     "date-fns": "^4.1.0",
     "query-string": "^9.1.1"

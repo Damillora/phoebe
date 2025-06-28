@@ -83,16 +83,16 @@
                                                     onchange={onFileChange}
                                                 />
                                                 <span class="file-cta">
-                                                    <span class="file-icon"
-                                                    ></span>
                                                     <span class="file-label">
-                                                        Choose a file or paste
-                                                        your image…
+                                                        Upload an image...
                                                     </span>
                                                 </span>
                                             </label>
                                         </div>
                                     </div>
+                                    <p class="help">
+                                        ...or paste your image here.
+                                    </p>
                                 </div>
                             </div>
                         </div>
