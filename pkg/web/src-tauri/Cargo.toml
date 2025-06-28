@@ -1,6 +1,6 @@
 [package]
 name = "phoebe"
-version = "0.3.1"
+version = "0.3.2"
 description = "Phoebe desktop client"
 authors = ["Damillora"]
 edition = "2021"
