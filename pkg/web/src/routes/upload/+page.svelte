@@ -11,9 +11,6 @@
     import ImageView from "$lib/components/ui/ImageView.svelte";
     import ImageViewLocal from "$lib/components/ui/ImageViewLocal.svelte";
 
-    let currentProgress = $state(0);
-    let similarityProgress = $state(0);
-
     let fileName = $state("");
     let file = $state();
     let contentsUrl = $state("");
@@ -65,7 +62,6 @@
             reader.readAsDataURL(file);
             var similarResponse = await searchBlob({
                 file,
-                onProgress: onSimilarityProgress,
             });
             if (similarResponse.similar) {
                 similar = similarResponse.similar;
@@ -86,7 +82,7 @@
     const onSubmit = async (e) => {
         e.preventDefault();
         uploading = true;
-        var blobResponse = await uploadBlob({ file, onProgress });
+        var blobResponse = await uploadBlob({ file });
         form.blob_id = blobResponse.id;
         const response = await postCreate(form);
         uploading = false;
@@ -130,17 +126,6 @@
                                 </div>
                             </div>
                         </div>
-                        {#if currentProgress > 0 && currentProgress < 100}
-                            <div class="panel-block column">
-                                <progress
-                                    class="progress is-primary is-small"
-                                    value={currentProgress}
-                                    max="100"
-                                >
-                                    {currentProgress}%
-                                </progress>
-                            </div>
-                        {/if}
                         <div class="panel-block column">
                             <div class="row">
                                 <label for="source" class="label"
@@ -193,7 +178,11 @@
             <div class="column is-two-thirds">
                 <div class="block">
                     {#if fileName}
-                        {#if similarLoading}
+                        {#if uploading}
+                            <div class="notification is-info">
+                                Uploading post...
+                            </div>
+                        {:else if similarLoading}
                             <div class="notification is-info">
                                 Searching for similar images...
                             </div>
@@ -212,10 +201,6 @@
                                 No similar images found.
                             </div>
                         {/if}
-                    {:else if currentProgress > 0 && currentProgress < 100}
-                        <div class="notification is-info">
-                            Your image is currently uploading...
-                        </div>
                     {:else}
                         <div class="notification is-primary">
                             Your image preview will appear here.

@@ -3,11 +3,13 @@
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
     import ImageView from "$lib/components/ui/ImageView.svelte";
     import { paginate } from "$lib/simple-pagination";
+    import ImageViewLocal from "$lib/components/ui/ImageViewLocal.svelte";
 
-    let currentProgress = $state(0);
+    let uploading = $state(false);
 
     let file = $state();
     let fileName = $state("");
+    let contentsUrl = $state("");
     let similar = $state([]);
     let similarCount = $state(0);
     let loading = $state(false);
@@ -24,12 +26,23 @@
         currentProgress = percentCompleted;
     };
 
+    const onPaste = async (e) => {
+        if (e.clipboardData.files[0]) {
+            file = e.clipboardData.files[0];
+            await handleFileChange();
+        }
+    };
     const onFileChange = async (e) => {
         file = e.target.files[0];
-        fileName = file.name;
+        await handleFileChange();
     };
-    const onSubmit = async (e) => {
-        e.preventDefault();
+    const handleFileChange = async (e) => {
+        fileName = file.name;
+        let reader = new FileReader();
+        reader.addEventListener("load", function () {
+            contentsUrl = reader.result ?? "";
+        });
+        reader.readAsDataURL(file);
         loading = true;
         loaded = false;
         similar = [];
@@ -41,6 +54,9 @@
         loading = false;
         loaded = true;
     };
+    const onSubmit = async (e) => {
+        e.preventDefault();
+    };
 </script>
 
 <section class="section">
@@ -48,7 +64,7 @@
         <div class="columns">
             <div class="column is-one-third">
                 <div class="panel is-primary">
-                    <form onsubmit={onSubmit}>
+                    <form>
                         <p class="panel-heading">Image Search</p>
                         <div class="panel-block column">
                             <div class="row">
@@ -70,36 +86,24 @@
                                                     <span class="file-icon"
                                                     ></span>
                                                     <span class="file-label">
-                                                        Choose a file…
+                                                        Choose a file or paste
+                                                        your image…
                                                     </span>
                                                 </span>
                                             </label>
                                         </div>
                                     </div>
-                                    {#if fileName}
-                                        <p class="help">{fileName}</p>
-                                    {/if}
                                 </div>
                             </div>
                         </div>
-                        {#if currentProgress > 0 && currentProgress < 100}
-                            <div class="panel-block">
-                                <progress
-                                    class="progress is-primary is-small"
-                                    value={currentProgress}
-                                    max="100"
-                                >
-                                    {currentProgress}%
-                                </progress>
+                        {#if fileName}
+                            <div class="panel-block column">
+                                <ImageViewLocal
+                                    alt={fileName}
+                                    src={contentsUrl}
+                                />
                             </div>
                         {/if}
-                        <div class="panel-block column">
-                            <button
-                                type="submit"
-                                class="button is-primary is-fullwidth is-outlined"
-                                >Search</button
-                            >
-                        </div>
                     </form>
                 </div>
             </div>
@@ -124,6 +128,10 @@
                             Similar posts will appear here.
                         </div>
                     {/if}
+                {:else}
+                    <div class="notification is-info">
+                        Searching for similar images...
+                    </div>
                 {/if}
                 <div class="columns is-multiline">
                     {#if !loading}
@@ -142,3 +150,5 @@
         </div>
     </div>
 </section>
+
+<svelte:window onpaste={onPaste} />

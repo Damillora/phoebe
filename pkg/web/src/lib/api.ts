@@ -119,7 +119,7 @@ export async function getPostCount() {
   return response.data;
 }
 
-export async function uploadBlob({ file, onProgress }) {
+export async function uploadBlob({ file }) {
   var formData = new FormData();
   formData.append("file", file);
   const endpoint = url + "/api/blob/upload";
@@ -132,16 +132,11 @@ export async function uploadBlob({ file, onProgress }) {
     },
     withCredentials: true,
     data: formData,
-    onUploadProgress: (e) => {
-      if (onProgress) {
-        onProgress(e);
-      }
-    },
   });
   return response.data;
 }
 
-export async function searchBlob({ file, onProgress }) {
+export async function searchBlob({ file }) {
   var formData = new FormData();
   formData.append("file", file);
   const endpoint = url + "/api/blob/search";
@@ -154,11 +149,6 @@ export async function searchBlob({ file, onProgress }) {
     },
     withCredentials: true,
     data: formData,
-    onUploadProgress: (e) => {
-      if (onProgress) {
-        onProgress(e);
-      }
-    },
   });
   return response.data;
 }
