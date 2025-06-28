@@ -1,8 +1,6 @@
 import { apiUrl, token } from "./stores.js";
 import { browser } from "$app/environment";
-import axios from "axios";
 import { isDesktop } from "./desktop-check.js";
-import axiosTauriApiAdapter from "axios-tauri-api-adapter";
 import { fetch as tauriFetch } from "@tauri-apps/plugin-http";
 
 let url = (browser && window.location.origin) || "";
