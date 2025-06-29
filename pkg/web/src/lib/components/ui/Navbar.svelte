@@ -4,6 +4,7 @@
     import { isTokenExpired, getUsernameFromToken } from "$lib/login-check";
     import { isDesktop } from "$lib/desktop-check";
     let menu_shown = $state(false);
+    let user_menu_shown = $state(false);
 
     let loggedIn = $state(false);
     let username = $state("");
@@ -14,6 +15,9 @@
 
     const toggleMenu = () => {
         menu_shown = !menu_shown;
+    };
+    const toggleUserMenu = () => {
+        user_menu_shown = !user_menu_shown;
     };
 
     let is_desktop = isDesktop;
@@ -53,11 +57,14 @@
 
         <div class="navbar-end">
             <div class="navbar-item has-dropdown is-hoverable">
-                <a href={"#"} class="navbar-link">
+                <a href={"#"} class="navbar-link" onclick={toggleUserMenu}>
                     {loggedIn ? username : "Guest"}
                 </a>
                 {#if loggedIn}
-                    <div class="navbar-dropdown is-right">
+                    <div
+                        class="navbar-dropdown is-right"
+                        class:is-hidden-mobile={!user_menu_shown}
+                    >
                         <a href="/user/profile" class="navbar-item">
                             Profile
                         </a>
@@ -73,7 +80,10 @@
                         <a href="/auth/logout" class="navbar-item">Log out</a>
                     </div>
                 {:else}
-                    <div class="navbar-dropdown is-right">
+                    <div
+                        class="navbar-dropdown is-right"
+                        class:is-hidden-mobile={!user_menu_shown}
+                    >
                         <a href="/auth/register" class="navbar-item">
                             Register
                         </a>
