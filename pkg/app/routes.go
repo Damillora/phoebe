@@ -11,4 +11,5 @@ func InitializeRoutes(g *gin.Engine) {
 	InitializeTagRoutes(g)
 	InitializeBlobRoutes(g)
 	InitializePostRoutes(g)
+	InitializeRobotRoutes(g)
 }
