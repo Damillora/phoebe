@@ -8,7 +8,7 @@
 
     let url = $state(get(apiUrl));
 
-    let is_desktop = isDesktop();
+    let is_desktop = isDesktop;
 
     const submitForm = async () => {
         updated = false;

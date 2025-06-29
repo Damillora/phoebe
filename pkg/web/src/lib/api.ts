@@ -11,7 +11,7 @@ let current_token;
 token.subscribe((value) => {
   current_token = value;
 });
-let currentFetch = isDesktop() ? tauriFetch : fetch;
+let currentFetch = isDesktop ? tauriFetch : fetch;
 
 export async function login({ username, password }) {
   const endpoint = url + "/api/auth/login";

@@ -16,7 +16,7 @@
         menu_shown = !menu_shown;
     };
 
-    let is_desktop = isDesktop();
+    let is_desktop = isDesktop;
 </script>
 
 <nav class="navbar is-primary" aria-label="main navigation">

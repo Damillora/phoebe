@@ -13,7 +13,7 @@
 
     let { children }: Props = $props();
 
-    let is_desktop = isDesktop();
+    let is_desktop = isDesktop;
 
     afterNavigate(() => {
         if (is_desktop) {

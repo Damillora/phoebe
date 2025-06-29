@@ -13,14 +13,14 @@ token.subscribe((value) => {
 });
 
 export const apiUrl = writable(
-  browser && isDesktop()
+  browser && isDesktop
     ? localStorage.getItem("apiUrl")
     : window.location.origin,
 );
 
 apiUrl.subscribe((value) => {
   if (value != null) {
-    if (browser && isDesktop()) {
+    if (browser && isDesktop) {
       localStorage.setItem("apiUrl", value);
     }
   }

@@ -1,5 +1,3 @@
-const isDesktop = () => {
-  return window.isTauri ?? false;
-};
+const isDesktop = __IS_DESKTOP__;
 
 export { isDesktop };
