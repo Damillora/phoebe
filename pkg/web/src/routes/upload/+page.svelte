@@ -10,6 +10,7 @@
     import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
     import ImageView from "$lib/components/ui/ImageView.svelte";
     import ImageViewLocal from "$lib/components/ui/ImageViewLocal.svelte";
+    import { handlePaste } from "$lib/paste";
 
     let fileName = $state("");
     let file = $state();
@@ -26,24 +27,13 @@
     });
 
     const onPaste = async (e) => {
-        if (e.clipboardData.files[0]) {
-            loading = true;
-            file = e.clipboardData.files[0];
-            fileName = "";
-            similar = [];
-            await handleFileChange();
-        }
+        file = await handlePaste(e);
+        fileName = "";
+        similar = [];
+        await handleFileChange();
     };
-    const onProgress = (e) => {
-        var percentCompleted = Math.round((e.loaded * 100) / e.total);
-        currentProgress = percentCompleted;
-    };
-    const onSimilarityProgress = (e) => {
-        var percentCompleted = Math.round((e.loaded * 100) / e.total);
-        similarityProgress = percentCompleted;
-    };
+
     const onFileChange = async (e) => {
-        loading = true;
         file = e.target.files[0];
         fileName = "";
         similar = [];
@@ -52,6 +42,7 @@
 
     const handleFileChange = async () => {
         if (file) {
+            loading = true;
             similarLoading = true;
             fileName = file.name;
             let reader = new FileReader();
@@ -215,7 +206,7 @@
                             <ImageViewLocal alt={fileName} src={contentsUrl} />
                         </figure>
                     </div>
-                {:else if loading && !(currentProgress > 0 && currentProgress < 100)}
+                {:else if loading}
                     <div class="skeleton-block"></div>
                 {/if}
             </div>

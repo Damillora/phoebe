@@ -4,6 +4,7 @@
     import ImageView from "$lib/components/ui/ImageView.svelte";
     import { paginate } from "$lib/simple-pagination";
     import ImageViewLocal from "$lib/components/ui/ImageViewLocal.svelte";
+    import { handlePaste } from "$lib/paste";
 
     let uploading = $state(false);
 
@@ -21,16 +22,9 @@
         tags: [],
     });
 
-    const onProgress = (e) => {
-        var percentCompleted = Math.round((e.loaded * 100) / e.total);
-        currentProgress = percentCompleted;
-    };
-
     const onPaste = async (e) => {
-        if (e.clipboardData.files[0]) {
-            file = e.clipboardData.files[0];
-            await handleFileChange();
-        }
+        file = await handlePaste(e);
+        await handleFileChange();
     };
     const onFileChange = async (e) => {
         file = e.target.files[0];
@@ -47,7 +41,7 @@
         loaded = false;
         similar = [];
         if (file) {
-            var response = await searchBlob({ file, onProgress });
+            var response = await searchBlob({ file });
             similar = response.similar;
             similarCount = similar.length;
         }
