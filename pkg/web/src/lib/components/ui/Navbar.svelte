@@ -35,6 +35,7 @@
             onclick={toggleMenu}
             role="button"
             class="navbar-burger"
+            class:is-active={menu_shown}
             aria-label="menu"
             aria-expanded="false"
         >
@@ -64,6 +65,7 @@
                     <div
                         class="navbar-dropdown is-right"
                         class:is-hidden-mobile={!user_menu_shown}
+                        class:is-hidden-tablet={!user_menu_shown}
                     >
                         <a href="/user/profile" class="navbar-item">
                             Profile
@@ -83,6 +85,7 @@
                     <div
                         class="navbar-dropdown is-right"
                         class:is-hidden-mobile={!user_menu_shown}
+                        class:is-hidden-tablet={!user_menu_shown}
                     >
                         <a href="/auth/register" class="navbar-item">
                             Register
