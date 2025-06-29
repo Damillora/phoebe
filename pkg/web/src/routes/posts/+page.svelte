@@ -87,6 +87,7 @@
 
     const changePage = (i) => {
         if (i >= 1 && i <= totalPages) {
+            loading = true;
             page = i;
             getData();
         }

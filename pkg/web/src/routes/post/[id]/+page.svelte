@@ -85,10 +85,29 @@
                             <div class="panel is-info">
                                 <div class="panel-heading">Post Actions</div>
 
+                                {#if post.width > 1000}
+                                    {#if isOriginal == true}
+                                        <a
+                                            href={"#"}
+                                            class="panel-block"
+                                            onclick={() => {
+                                                isOriginal = false;
+                                            }}>View Smaller</a
+                                        >
+                                    {:else}
+                                        <a
+                                            href={"#"}
+                                            class="panel-block"
+                                            onclick={() => {
+                                                isOriginal = true;
+                                            }}>View Original</a
+                                        >
+                                    {/if}
+                                {/if}
                                 <a
                                     class="panel-block"
                                     href={post.image_path}
-                                    target="_blank">View Original</a
+                                    target="_blank">Download Image</a
                                 >
                                 <a
                                     href={"#"}
