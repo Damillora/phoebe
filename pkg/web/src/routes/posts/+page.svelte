@@ -165,9 +165,17 @@
                 <div class="column is-two-thirds">
                     <div class="columns is-multiline">
                         {#if !loading}
-                            <div class="column is-full">
-                                <PostGallery {posts} />
-                            </div>
+                            {#if posts.length > 0}
+                                <div class="column is-full">
+                                    <PostGallery {posts} />
+                                </div>
+                            {:else}
+                                <div class="column is-full">
+                                    <div class="notification is-warning">
+                                        No posts found.
+                                    </div>
+                                </div>
+                            {/if}
 
                             <div class="column is-full">
                                 <nav
@@ -185,7 +193,7 @@
                                         href={null}
                                         onclick={() => changePage(page + 1)}
                                         class="pagination-next"
-                                        class:is-disabled={page == totalPages}
+                                        class:is-disabled={page >= totalPages}
                                         >Next</a
                                     >
                                     <ul class="pagination-list">

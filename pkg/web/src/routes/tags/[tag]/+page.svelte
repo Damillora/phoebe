@@ -98,8 +98,13 @@
                     {:else}
                         <ViewTagNotesPanel {data} {toggleEditMenu} />
                     {/if}
-                    <h1 class="title">Posts</h1>
-                    <PostGallery {posts} />
+                    {#if posts.length > 0}
+                        <PostGallery {posts} />
+                    {:else}
+                        <div class="notification is-warning">
+                            No posts found for this tag.
+                        </div>
+                    {/if}
                 {:else}
                     <div class="skeleton-block"></div>
                 {/if}
