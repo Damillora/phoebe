@@ -22,6 +22,46 @@ func GetTagAll() []models.TagListItem {
 	return tags
 }
 
+func GetTags(q string, tagType string, page int, perPage int) []models.TagListItem {
+	var tags []models.TagListItem
+	query := database.DB.Model(&database.Tag{}).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id").
+		Joins("left join post_tags on post_tags.tag_id = tags.id").
+		Select("tags.id as tag_id, tags.name as tag_name, tag_types.name as tag_type, count(post_tags.post_id) as post_count")
+
+	if q != "" {
+		query = query.Where("tags.name LIKE ?", "%"+q+"%")
+	}
+	if tagType != "" {
+		query = query.Where("tag_types.name = ?", tagType)
+	}
+	query = query.Group("tags.id, tags.name, tag_types.name").
+		Order("post_count DESC").
+		Offset((page - 1) * perPage).
+		Limit(perPage)
+
+	query.
+		Find(&tags)
+	return tags
+}
+
+func CountTags(q string, tagType string) int {
+	query := database.DB.Model(&database.Tag{}).
+		Joins("join tag_types on tag_types.id = tags.tag_type_id")
+
+	if q != "" {
+		query = query.Where("tags.name LIKE ?", "%"+q+"%")
+	}
+	if tagType != "" {
+		query = query.Where("tag_types.name = ?", tagType)
+	}
+	query = query.Group("tags.id, tags.name, tag_types.name")
+
+	var count int64
+	query.Count(&count)
+	return int(count)
+}
+
 func GetTagFilterString(tagString []string) []models.TagListItem {
 	tagObjs, _ := ParseReadTags(tagString)
 	return GetTagFilter(tagObjs)

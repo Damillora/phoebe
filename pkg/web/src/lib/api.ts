@@ -61,6 +61,15 @@ export async function getTags() {
   const data = await response.json();
   return data;
 }
+export async function searchTags({ q, tagtype }) {
+  let endpoint = url + "/api/tag/search";
+  if (q || tagtype) {
+    endpoint = endpoint + "?q=" + q + "&type=" + tagtype;
+  }
+  const response = await currentFetch(endpoint);
+  const data = await response.json();
+  return data;
+}
 
 export async function getTag({ tag }) {
   const endpoint = url + "/api/tag/" + tag;

@@ -30,7 +30,7 @@ type BlobSimilarResponse struct {
 }
 
 type SimilarResponse struct {
-	Similar    []PostSimilarityListItem `json:"similar"`
+	Similar []PostSimilarityListItem `json:"similar"`
 }
 
 type PostPaginationResponse struct {
@@ -43,4 +43,11 @@ type PostPaginationResponse struct {
 
 type PostCountResponse struct {
 	PostCount int `json:"postCount"`
+}
+
+type TagPaginationResponse struct {
+	CurrentPage int           `json:"currentPage"`
+	TotalPage   int           `json:"totalPage"`
+	TagCount    int           `json:"tagCount"`
+	Tags        []TagListItem `json:"tags"`
 }
