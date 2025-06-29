@@ -23,7 +23,7 @@
     let is_desktop = isDesktop;
 </script>
 
-<nav class="navbar is-primary" aria-label="main navigation">
+<nav class="navbar is-primary is-fixed-top" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="/">
             <img class="image is-32x32" alt="phoebe logo" src={logo} />
