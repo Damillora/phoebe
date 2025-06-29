@@ -14,11 +14,13 @@
 
     let data = $state();
     let posts = $state([]);
+    let postLoading = $state(false);
 
     const getData = async () => {
         if (tag) {
             data = null;
             data = await getTag({ tag });
+            postLoading = true;
             const response = await getPosts({
                 page: 1,
                 q: tag,
@@ -26,6 +28,7 @@
             if (response.posts) {
                 posts = response.posts.slice(0, 4);
             }
+            postLoading = false;
         }
     };
 
@@ -98,12 +101,16 @@
                     {:else}
                         <ViewTagNotesPanel {data} {toggleEditMenu} />
                     {/if}
-                    {#if posts.length > 0}
-                        <PostGallery {posts} />
+                    {#if !postLoading}
+                        {#if posts.length > 0}
+                            <PostGallery {posts} />
+                        {:else}
+                            <div class="notification is-warning">
+                                No posts found for this tag.
+                            </div>
+                        {/if}
                     {:else}
-                        <div class="notification is-warning">
-                            No posts found for this tag.
-                        </div>
+                        <div class="skeleton-block"></div>
                     {/if}
                 {:else}
                     <div class="skeleton-block"></div>
