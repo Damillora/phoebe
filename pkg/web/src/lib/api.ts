@@ -61,11 +61,21 @@ export async function getTags() {
   const data = await response.json();
   return data;
 }
-export async function searchTags({ q, tagtype }) {
-  let endpoint = url + "/api/tag/search";
-  if (q || tagtype) {
-    endpoint = endpoint + "?q=" + q + "&type=" + tagtype;
+export async function searchTags({ q, tagtype, page, perPage }) {
+  if (!perPage) {
+    perPage = 20;
   }
+  let endpoint = url + "/api/tag/search";
+  endpoint =
+    endpoint +
+    "?q=" +
+    q +
+    "&type=" +
+    tagtype +
+    "&page=" +
+    page +
+    "&perPage=" +
+    perPage;
   const response = await currentFetch(endpoint);
   const data = await response.json();
   return data;

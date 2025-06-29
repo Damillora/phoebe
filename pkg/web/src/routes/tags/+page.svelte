@@ -16,6 +16,7 @@
     let loading = $state(false);
     let tagTypesLoading = $state(false);
     let page = $state(1);
+    let perPage = 20;
     let totalPages = $state(1);
     let totalTags = $state(0);
     let q = $state("");
@@ -23,7 +24,7 @@
     let pagination: string[] = $state([]);
 
     const getData = async () => {
-        const data = await searchTags({ q, tagtype });
+        const data = await searchTags({ q, tagtype, page, perPage });
         tags = data.tags;
         page = data.currentPage;
         totalPages = data.totalPage;
