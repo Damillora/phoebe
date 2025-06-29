@@ -100,7 +100,7 @@
             <div class="columns is-multiline">
                 <div class="column is-one-third">
                     <div class="panel is-primary">
-                        <div class="panel-heading">Menu</div>
+                        <div class="panel-heading">Browse</div>
                         <div class="panel-block column">
                             <form onsubmit={onSearch}>
                                 <div class="field">
