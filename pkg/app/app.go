@@ -7,6 +7,7 @@ import (
 
 	"github.com/Damillora/phoebe/pkg/config"
 	"github.com/Damillora/phoebe/pkg/database"
+	"github.com/Damillora/phoebe/pkg/middleware"
 	"github.com/Damillora/phoebe/pkg/web"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,9 @@ func Start() {
 	webFS := web.WebAssets()
 	webAssets, _ := fs.Sub(webFS, "_app")
 
+	if config.CurrentConfig.DisableSearchIndexing == "true" {
+		g.Use(middleware.RobotMiddleware())
+	}
 	g.NoRoute(func(c *gin.Context) {
 		//c.String(http.StatusOK, "AAA")
 		c.FileFromFS("./app.html", http.FS(webFS))
