@@ -13,7 +13,7 @@
     let contentsUrl = $state("");
     let similar: BlobSimilarListItem[] | null = $state(null);
     let similarCount = $state(0);
-    let loading: LoadingState = $state();
+    let loading: LoadingStateWithResponse<BlobSimilarListResponse> = $state();
 
     let form = $state({
         blob_id: "",

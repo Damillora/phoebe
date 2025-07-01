@@ -15,10 +15,11 @@
     let fileName = $state("");
     let file: File | undefined = $state();
     let contentsUrl = $state("");
-    let similar = $state([]);
+    let similar: BlobSimilarListItem[] = $state([]);
     let loading: LoadingState = $state();
     let uploading: LoadingState = $state();
-    let similarLoading: LoadingState = $state();
+    let similarLoading: LoadingStateWithResponse<BlobSimilarListResponse> =
+        $state();
 
     let form = $state({
         blob_id: "",
@@ -156,8 +157,8 @@
                             <button
                                 type="submit"
                                 class="button is-primary is-fullwidth is-outlined"
-                                disabled={uploading || similarLoading}
-                                >Submit</button
+                                disabled={uploading != undefined ||
+                                    similarLoading != undefined}>Submit</button
                             >
                         </div>
                     </form>

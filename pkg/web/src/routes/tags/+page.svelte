@@ -32,7 +32,7 @@
         tagTypes = await getTagTypes();
     };
 
-    const handleSearch = (e) => {
+    const handleSearch = (e: Event) => {
         e.preventDefault();
         goto(`/tags?q=${q}&type=${tagtype}`);
     };
@@ -42,7 +42,7 @@
         loading = getData();
     });
 
-    const changePage = (i) => {
+    const changePage = (i: number) => {
         if (i >= 1 && i <= totalPages) {
             page = i;
             loading = getData();

@@ -10,11 +10,11 @@
 
     import { page } from "$app/stores";
     import AuthCheck from "$lib/components/checks/AuthCheck.svelte";
-    let { tag } = $page.params;
+    let { tag } = $state($page.params);
 
     let data = $state();
     let posts: PostListItem[] = $state([]);
-    let postLoading: LoadingState = $state();
+    let postLoading: LoadingStateWithResponse<PostListResponse> = $state();
 
     const getData = async () => {
         if (tag) {
