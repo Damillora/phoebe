@@ -1,15 +1,14 @@
-<script>
+<script lang="ts">
     import { postDelete } from "$lib/api";
 
     let { id, toggleDeleteMenu, onDelete } = $props();
-    let deleteLoading = $state(false);
+    let deleteLoading: LoadingState = $state();
 
-    const deletePost = async (e) => {
+    const deletePost = async (e: Event) => {
         e.preventDefault();
-        deleteLoading = true;
-        const success = await postDelete({ id });
-        deleteLoading = false;
+        deleteLoading = postDelete({ id });
         toggleDeleteMenu(e);
+        let success = await deleteLoading;
         onDelete(success);
     };
 </script>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
 
     import { getTag, getPosts } from "$lib/api";
@@ -13,27 +13,26 @@
     let { tag } = $page.params;
 
     let data = $state();
-    let posts = $state([]);
-    let postLoading = $state(false);
+    let posts: PostListItem[] = $state([]);
+    let postLoading: LoadingState = $state();
 
     const getData = async () => {
         if (tag) {
             data = null;
             data = await getTag({ tag });
-            postLoading = true;
-            const response = await getPosts({
+            postLoading = getPosts({
                 page: 1,
                 q: tag,
             });
+            const response = await postLoading;
             if (response.posts) {
                 posts = response.posts.slice(0, 4);
             }
-            postLoading = false;
         }
     };
 
     let renameMenuShown = $state(false);
-    const toggleRenameMenu = (e) => {
+    const toggleRenameMenu = (e: Event) => {
         e.preventDefault();
         renameMenuShown = !renameMenuShown;
     };
@@ -43,7 +42,7 @@
         editMenuShown = !editMenuShown;
     };
 
-    const onTagSubmit = (newName) => {
+    const onTagSubmit = (newName: string) => {
         tag = newName;
         toggleEditMenu();
         getData();
@@ -60,7 +59,7 @@
             <div class="column is-one-third">
                 {#if data}
                     <div class="block">
-                        <ViewTagPanel {tag} {data} />
+                        <ViewTagPanel {tag} {data} {toggleRenameMenu} />
                     </div>
                     {#if renameMenuShown}
                         <div class="block">
@@ -101,7 +100,9 @@
                     {:else}
                         <ViewTagNotesPanel {data} {toggleEditMenu} />
                     {/if}
-                    {#if !postLoading}
+                    {#await postLoading}
+                        <div class="skeleton-block"></div>
+                    {:then _}
                         {#if posts.length > 0}
                             <PostGallery {posts} />
                         {:else}
@@ -109,9 +110,7 @@
                                 No posts found for this tag.
                             </div>
                         {/if}
-                    {:else}
-                        <div class="skeleton-block"></div>
-                    {/if}
+                    {/await}
                 {:else}
                     <div class="skeleton-block"></div>
                 {/if}

@@ -1,21 +1,21 @@
-<script>
+<script lang="ts">
     import { register } from "$lib/api";
     import { goto } from "$app/navigation";
+    let form = $state({
+        username: "",
+        password: "",
+        email: "",
+    });
 
-    let username = $state("");
-    let password = $state("");
-    let email = $state("");
-    let error = "";
-
-    const doRegister = async (e) => {
+    async function doRegister(e: Event) {
         e.preventDefault();
         try {
-            const tokenData = await register({ email, username, password });
+            const tokenData = await register(form);
             goto("/");
         } catch (error) {
             error = "We had trouble registering you";
         }
-    };
+    }
 </script>
 
 <div class="container">
@@ -34,7 +34,7 @@
                                 class="input"
                                 type="text"
                                 placeholder="Email"
-                                bind:value={email}
+                                bind:value={form.email}
                                 required
                             />
                         </div>
@@ -47,7 +47,7 @@
                                 class="input"
                                 type="text"
                                 placeholder="Username"
-                                bind:value={username}
+                                bind:value={form.username}
                                 required
                             />
                         </div>
@@ -60,7 +60,7 @@
                                 class="input"
                                 type="password"
                                 placeholder="Password"
-                                bind:value={password}
+                                bind:value={form.password}
                                 required
                             />
                         </div>

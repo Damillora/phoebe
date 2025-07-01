@@ -1,16 +1,17 @@
-<script>
+<script lang="ts">
     import { login } from "$lib/api";
     import { goto } from "$app/navigation";
-
-    let username = $state("");
-    let password = $state("");
+    let form = $state({
+        username: "",
+        password: "",
+    });
     let error = $state("");
 
-    const doLogin = async (e) => {
+    const doLogin = async (e: Event) => {
         e.preventDefault();
         error = "";
         try {
-            const tokenData = await login({ username, password });
+            const tokenData = await login(form);
             goto("/");
         } catch (e) {
             error = "We had trouble logging you in";
@@ -35,7 +36,7 @@
                                 class="input"
                                 type="text"
                                 placeholder="Username"
-                                bind:value={username}
+                                bind:value={form.username}
                                 required
                             />
                         </div>
@@ -48,7 +49,7 @@
                                 class="input"
                                 type="password"
                                 placeholder="Password"
-                                bind:value={password}
+                                bind:value={form.password}
                                 required
                             />
                         </div>

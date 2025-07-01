@@ -91,8 +91,8 @@
                             Register
                         </a>
                         <a href="/auth/login" class="navbar-item">Log in</a>
-                        <hr class="navbar-divider" />
                         {#if is_desktop}
+                            <hr class="navbar-divider" />
                             <a href="/desktop/settings" class="navbar-item"
                                 >Desktop Settings</a
                             >

@@ -10,16 +10,16 @@
     let postCount: number = $state(0);
     let postCountLoaded: boolean = $state(false);
 
-    const onTagChange = (value) => {
+    const onTagChange = (value: any) => {
         searchTerms = value.detail.tags;
     };
 
-    const onAutocomplete = async (tag) => {
+    const onAutocomplete = async (tag: string) => {
         const list = await getTagAutocomplete({ tag });
         return list;
     };
 
-    const onSearch = (e) => {
+    const onSearch = (e: Event) => {
         e.preventDefault();
         if (searchTerms.length > 0) {
             goto(`/posts?tags=${searchTerms.join("+")}`);

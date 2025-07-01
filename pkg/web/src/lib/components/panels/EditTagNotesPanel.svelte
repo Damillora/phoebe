@@ -16,7 +16,7 @@
     const onFormSubmit = async (e) => {
         e.preventDefault();
         editNotesLoading = true;
-        await updateTagNotes(tag, form);
+        await updateTagNotes({ id: tag, ...form });
         editNotesLoading = false;
         toggleEditMenu();
 

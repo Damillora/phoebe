@@ -8,33 +8,28 @@
     import { paginate } from "$lib/simple-pagination";
     import { onMount } from "svelte";
     import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
+    import Pagination from "$lib/components/ui/Pagination.svelte";
 
     let url = $derived(currentPage.url);
 
-    let tags = $state([]);
-    let tagTypes = $state([]);
-    let loading = $state(false);
-    let tagTypesLoading = $state(false);
+    let tags: TagListItem[] = $state([]);
+    let tagTypes: TagTypeListItem[] = $state([]);
+    let loading: LoadingState = $state();
+    let tagTypesLoading: LoadingState = $state();
     let page = $state(1);
     let perPage = 20;
     let totalPages = $state(1);
-    let totalTags = $state(0);
     let q = $state("");
     let tagtype = $state("");
-    let pagination: string[] = $state([]);
 
     const getData = async () => {
         const data = await searchTags({ q, tagtype, page, perPage });
         tags = data.tags;
         page = data.currentPage;
         totalPages = data.totalPage;
-        totalTags = data.tagCount;
-        pagination = paginate(page, totalPages);
-        loading = false;
     };
     const getTagTypesData = async () => {
         tagTypes = await getTagTypes();
-        tagTypesLoading = false;
     };
 
     const handleSearch = (e) => {
@@ -42,23 +37,20 @@
         goto(`/tags?q=${q}&type=${tagtype}`);
     };
     afterNavigate(() => {
-        loading = true;
         q = url.searchParams.get("q") ?? "";
         tagtype = url.searchParams.get("type") ?? "";
-        getData();
+        loading = getData();
     });
 
     const changePage = (i) => {
         if (i >= 1 && i <= totalPages) {
-            loading = true;
             page = i;
-            getData();
+            loading = getData();
         }
     };
 
     onMount(() => {
-        tagTypesLoading = true;
-        getTagTypesData();
+        tagTypesLoading = getTagTypesData();
     });
 </script>
 
@@ -69,7 +61,9 @@
                 <form onsubmit={handleSearch}>
                     <div class="panel is-primary">
                         <div class="panel-heading">Tags</div>
-                        {#if !tagTypesLoading}
+                        {#await tagTypesLoading}
+                            <div class="skeleton-block"></div>
+                        {:then _}
                             <div class="panel-block column">
                                 <div class="row">
                                     <strong>Name:</strong>
@@ -119,14 +113,14 @@
                                     >Search</button
                                 >
                             </div>
-                        {:else}
-                            <div class="skeleton-block"></div>
-                        {/if}
+                        {/await}
                     </div>
                 </form>
             </div>
             <div class="column is-two-thirds">
-                {#if !loading}
+                {#await loading}
+                    <div class="skeleton-block"></div>
+                {:then _}
                     {#if tags.length > 0}
                         <div class="panel is-info">
                             {#each tags as tag}
@@ -143,51 +137,9 @@
                         </div>
                     {/if}
                     <div class="column is-full">
-                        <nav
-                            class="pagination is-centered"
-                            aria-label="pagination"
-                        >
-                            <a
-                                href={null}
-                                onclick={() => changePage(page - 1)}
-                                class="pagination-previous"
-                                class:is-disabled={page == 1}>Previous</a
-                            >
-                            <a
-                                href={null}
-                                onclick={() => changePage(page + 1)}
-                                class="pagination-next"
-                                class:is-disabled={page >= totalPages}>Next</a
-                            >
-                            <ul class="pagination-list">
-                                {#each pagination as pageEntry}
-                                    {#if pageEntry == "..."}
-                                        <li>
-                                            <span class="pagination-ellipsis"
-                                                >&hellip;</span
-                                            >
-                                        </li>
-                                    {:else}
-                                        <li>
-                                            <a
-                                                href={null}
-                                                onclick={() =>
-                                                    changePage(pageEntry)}
-                                                class="pagination-link"
-                                                class:is-current={page ==
-                                                    pageEntry}
-                                                aria-label="Goto page {pageEntry}"
-                                                >{pageEntry}</a
-                                            >
-                                        </li>
-                                    {/if}
-                                {/each}
-                            </ul>
-                        </nav>
+                        <Pagination {page} {totalPages} {changePage} />
                     </div>
-                {:else}
-                    <div class="skeleton-block"></div>
-                {/if}
+                {/await}
             </div>
         </div>
     </div>

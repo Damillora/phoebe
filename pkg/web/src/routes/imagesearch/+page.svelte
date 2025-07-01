@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { getTagAutocomplete, searchBlob } from "$lib/api";
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
     import ImageView from "$lib/components/ui/ImageView.svelte";
@@ -8,13 +8,12 @@
 
     let uploading = $state(false);
 
-    let file = $state();
+    let file: File | undefined = $state();
     let fileName = $state("");
     let contentsUrl = $state("");
-    let similar = $state([]);
+    let similar: BlobSimilarListItem[] | null = $state(null);
     let similarCount = $state(0);
-    let loading = $state(false);
-    let loaded = $state(false);
+    let loading: LoadingState = $state();
 
     let form = $state({
         blob_id: "",
@@ -22,34 +21,28 @@
         tags: [],
     });
 
-    const onPaste = async (e) => {
+    const onPaste = async (e: any) => {
         file = await handlePaste(e);
         await handleFileChange();
     };
-    const onFileChange = async (e) => {
+    const onFileChange = async (e: any) => {
         file = e.target.files[0];
         await handleFileChange();
     };
-    const handleFileChange = async (e) => {
-        fileName = file.name;
-        let reader = new FileReader();
-        reader.addEventListener("load", function () {
-            contentsUrl = reader.result ?? "";
-        });
-        reader.readAsDataURL(file);
-        loading = true;
-        loaded = false;
-        similar = [];
+    const handleFileChange = async () => {
         if (file) {
-            var response = await searchBlob({ file });
+            fileName = file.name;
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                contentsUrl = reader.result as string;
+            });
+            reader.readAsDataURL(file);
+            similar = [];
+            loading = searchBlob({ file });
+            const response = await loading;
             similar = response.similar;
-            similarCount = similar.length;
+            similarCount = similar?.length ?? 0;
         }
-        loading = false;
-        loaded = true;
-    };
-    const onSubmit = async (e) => {
-        e.preventDefault();
     };
 </script>
 
@@ -102,8 +95,12 @@
                 </div>
             </div>
             <div class="column is-two-thirds">
-                {#if !loading}
-                    {#if loaded}
+                {#await loading}
+                    <div class="notification is-info">
+                        Searching for similar images...
+                    </div>
+                {:then _}
+                    {#if similar}
                         {#if similarCount > 0}
                             <div class="block">
                                 <div class="notification is-success">
@@ -122,23 +119,19 @@
                             Similar posts will appear here.
                         </div>
                     {/if}
-                {:else}
-                    <div class="notification is-info">
-                        Searching for similar images...
-                    </div>
-                {/if}
+                {/await}
                 <div class="columns is-multiline">
-                    {#if !loading}
-                        {#if similarCount > 0}
+                    {#await loading}
+                        <div class="column">
+                            <div class="skeleton-block"></div>
+                        </div>
+                    {:then _}
+                        {#if similar && similarCount > 0}
                             <div class="column is-full">
                                 <PostGallery posts={similar} />
                             </div>
                         {/if}
-                    {:else}
-                        <div class="column">
-                            <div class="skeleton-block"></div>
-                        </div>
-                    {/if}
+                    {/await}
                 </div>
             </div>
         </div>

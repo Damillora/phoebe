@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import {
         uploadBlob,
         postCreate,
@@ -8,17 +8,17 @@
     import { goto } from "$app/navigation";
     import Tags from "svelte-tags-input";
     import AuthRequired from "$lib/components/checks/AuthRequired.svelte";
-    import ImageView from "$lib/components/ui/ImageView.svelte";
     import ImageViewLocal from "$lib/components/ui/ImageViewLocal.svelte";
     import { handlePaste } from "$lib/paste";
+    import { readFileAsDataUrl } from "$lib/common";
 
     let fileName = $state("");
-    let file = $state();
+    let file: File | undefined = $state();
     let contentsUrl = $state("");
     let similar = $state([]);
-    let loading = $state(false);
-    let uploading = $state(false);
-    let similarLoading = $state(false);
+    let loading: LoadingState = $state();
+    let uploading: LoadingState = $state();
+    let similarLoading: LoadingState = $state();
 
     let form = $state({
         blob_id: "",
@@ -26,14 +26,14 @@
         tags: [],
     });
 
-    const onPaste = async (e) => {
+    const onPaste = async (e: any) => {
         file = await handlePaste(e);
         fileName = "";
         similar = [];
         await handleFileChange();
     };
 
-    const onFileChange = async (e) => {
+    const onFileChange = async (e: any) => {
         file = e.target.files[0];
         fileName = "";
         similar = [];
@@ -42,42 +42,37 @@
 
     const handleFileChange = async () => {
         if (file) {
-            loading = true;
-            similarLoading = true;
             fileName = file.name;
-            let reader = new FileReader();
-            reader.addEventListener("load", function () {
-                contentsUrl = reader.result ?? "";
-                loading = false;
-            });
-            reader.readAsDataURL(file);
-            var similarResponse = await searchBlob({
+            loading = readFileAsDataUrl(file);
+            contentsUrl = await loading;
+            similarLoading = searchBlob({
                 file,
             });
+            var similarResponse = await similarLoading;
             if (similarResponse.similar) {
                 similar = similarResponse.similar;
             }
-            similarLoading = false;
         }
     };
 
-    const onTagChange = (value) => {
+    const onTagChange = (value: any) => {
         form.tags = value.detail.tags;
     };
 
-    const onAutocomplete = async (tag) => {
+    const onAutocomplete = async (tag: string) => {
         const list = await getTagAutocomplete({ tag, positive: true });
         return list;
     };
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e: Event) => {
         e.preventDefault();
-        uploading = true;
-        var blobResponse = await uploadBlob({ file });
-        form.blob_id = blobResponse.id;
-        const response = await postCreate(form);
-        uploading = false;
-        goto(`/post/${response.id}`);
+        if (file) {
+            uploading = uploadBlob({ file });
+            var blobResponse = await uploading;
+            form.blob_id = blobResponse.id;
+            const response = await postCreate(form);
+            goto(`/post/${response.id}`);
+        }
     };
 </script>
 
@@ -171,44 +166,52 @@
             <div class="column is-two-thirds">
                 <div class="block">
                     {#if fileName}
-                        {#if uploading}
+                        {#await uploading}
                             <div class="notification is-info">
                                 Uploading post...
                             </div>
-                        {:else if similarLoading}
+                        {/await}
+                        {#await similarLoading}
                             <div class="notification is-info">
                                 Searching for similar images...
                             </div>
-                        {:else if similar.length > 0}
-                            <div class="notification is-warning">
-                                There are similar images existing:
-                                {#each similar as post, i}
-                                    <a href="/post/{post.id}">{post.id}</a>
-                                    {#if i < similar.length - 1}
-                                        ,
-                                    {/if}
-                                {/each}
-                            </div>
-                        {:else}
-                            <div class="notification is-success">
-                                No similar images found.
-                            </div>
-                        {/if}
+                        {:then _}
+                            {#if similar.length > 0}
+                                <div class="notification is-warning">
+                                    There are similar images existing:
+                                    {#each similar as post, i}
+                                        <a href="/post/{post.id}">{post.id}</a>
+                                        {#if i < similar.length - 1}
+                                            ,
+                                        {/if}
+                                    {/each}
+                                </div>
+                            {:else}
+                                <div class="notification is-success">
+                                    No similar images found.
+                                </div>
+                            {/if}
+                        {/await}
                     {:else}
                         <div class="notification is-primary">
                             Your image preview will appear here.
                         </div>
                     {/if}
                 </div>
-                {#if fileName}
-                    <div class="box">
-                        <figure class="image">
-                            <ImageViewLocal alt={fileName} src={contentsUrl} />
-                        </figure>
-                    </div>
-                {:else if loading}
+                {#await loading}
                     <div class="skeleton-block"></div>
-                {/if}
+                {:then _}
+                    {#if fileName}
+                        <div class="box">
+                            <figure class="image">
+                                <ImageViewLocal
+                                    alt={fileName}
+                                    src={contentsUrl}
+                                />
+                            </figure>
+                        </div>
+                    {/if}
+                {/await}
             </div>
         </div>
     </div>

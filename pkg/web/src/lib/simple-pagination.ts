@@ -1,39 +1,39 @@
 // Implementation in ES6
 // https://gist.github.com/kottenator/9d936eb3e4e3c3e02598
 
-const paginate = (c, m) => {
-    let current = c,
-        last = m,
-        delta = 1,
-        left = current - delta,
-        right = current + delta + 1,
-        range = [],
-        rangeWithDots = [],
-        l;
+const paginate = (c: number, m: number) => {
+  let current = c,
+    last = m,
+    delta = 1,
+    left = current - delta,
+    right = current + delta + 1,
+    range = [],
+    rangeWithDots = [],
+    l;
 
-    for (let i = 1; i <= last; i++) {
-        if (i == 1 || i == last || i >= left && i < right) {
-            range.push(i);
-        }
+  for (let i = 1; i <= last; i++) {
+    if (i == 1 || i == last || (i >= left && i < right)) {
+      range.push(i);
     }
+  }
 
-    for (let i of range) {
-        if (l) {
-            if (i - l === 2) {
-                rangeWithDots.push(l + 1);
-            } else if (i - l !== 1) {
-                rangeWithDots.push('...');
-            }
-        }
-        rangeWithDots.push(i);
-        l = i;
+  for (let i of range) {
+    if (l) {
+      if (i - l === 2) {
+        rangeWithDots.push(l + 1);
+      } else if (i - l !== 1) {
+        rangeWithDots.push("...");
+      }
     }
+    rangeWithDots.push(i);
+    l = i;
+  }
 
-    return rangeWithDots;
-}
+  return rangeWithDots;
+};
 
 export { paginate };
-/* 
+/*
 Test it:
 
 for (let i = 1, l = 20; i <= l; i++)

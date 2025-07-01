@@ -4,26 +4,26 @@
     import { getPosts, getTag, getTagAutocomplete } from "$lib/api";
     import TagLinkNumbered from "$lib/components/ui/TagLinkNumbered.svelte";
     import PostGallery from "$lib/components/ui/PostGallery.svelte";
-    import queryString from "query-string";
     import Tags from "svelte-tags-input";
+
     import { paginate } from "$lib/simple-pagination";
     import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
-    import { page as currentPage } from "$app/stores";
-    import { onMount } from "svelte";
+    import { page as currentPage } from "$app/state";
+    import Pagination from "$lib/components/ui/Pagination.svelte";
 
-    let url = $derived($currentPage.url);
+    let url = $derived(currentPage.url);
 
-    let searchTerms = $state([]);
+    let tagQuery: string = $state("");
+    let searchTerms: string[] = $state([]);
+
+    let loading: LoadingState = $state();
 
     let page = $state(1);
     let totalPages = $state(1);
-    let pagination: string[] = $state([]);
-    let posts = $state([]);
-    let postCount = 0;
-    let tags = $state([]);
-    let tagInfo = $state(null);
-    let categorizedTags = {};
-    let loading = $state(false);
+    let posts: PostListItem[] = $state([]);
+    let tags: TagListItem[] = $state([]);
+
+    let tagInfo: TagGetResponse | null = $state(null);
 
     const getData = async () => {
         const data = await getPosts({ page, q: searchTerms.join("+") });
@@ -37,35 +37,28 @@
                 )
                 .sort((a, b) => b.postCount - a.postCount);
             totalPages = data.totalPage;
-            postCount = data.postCount;
-            pagination = paginate(page, totalPages);
         } else {
             posts = [];
             tags = [];
             totalPages = 0;
-            postCount = 0;
-            pagination = paginate(page, totalPages);
         }
 
         if (searchTerms.filter((x) => !x.startsWith("-")).length == 1) {
             tagInfo = await getTag({ tag: searchTerms[0] });
         }
-        loading = false;
     };
-    let tagQuery = $state();
 
-    const onTagChange = (value) => {
+    const onTagChange = (value: any) => {
         searchTerms = value.detail.tags;
     };
 
-    const onAutocomplete = async (tag) => {
+    const onAutocomplete = async (tag: string) => {
         const list = await getTagAutocomplete({ tag });
         return list;
     };
 
     afterNavigate(() => {
-        loading = true;
-        tagQuery = url.searchParams.get("tags");
+        tagQuery = url.searchParams.get("tags") ?? "";
         if (tagQuery) {
             searchTerms = tagQuery.split(" ");
         } else {
@@ -74,9 +67,9 @@
         }
         posts = [];
         page = 1;
-        getData();
+        loading = getData();
     });
-    const onSearch = (e) => {
+    const onSearch = (e: Event) => {
         e.preventDefault();
         if (searchTerms.length > 0) {
             goto(`/posts?tags=${searchTerms.join("+")}`);
@@ -85,11 +78,10 @@
         }
     };
 
-    const changePage = (i) => {
+    const changePage = (i: number) => {
         if (i >= 1 && i <= totalPages) {
-            loading = true;
             page = i;
-            getData();
+            loading = getData();
         }
     };
 </script>
@@ -128,17 +120,16 @@
                                 </div>
                             </form>
                         </div>
-                        {#if !loading}
+                        {#await loading}
+                            <div class="skeleton-block"></div>
+                        {:then _}
                             {#each tags as tag (tag)}
                                 <TagLinkNumbered
-                                    class=""
                                     tag={tag.tagType + ":" + tag.tagName}
                                     num={tag.postCount}
                                 />
                             {/each}
-                        {:else}
-                            <div class="skeleton-block"></div>
-                        {/if}
+                        {/await}
                     </div>
                     {#if tagInfo}
                         <div class="panel is-info">
@@ -164,7 +155,11 @@
                 </div>
                 <div class="column is-two-thirds">
                     <div class="columns is-multiline">
-                        {#if !loading}
+                        {#await loading}
+                            <div class="column">
+                                <div class="skeleton-block"></div>
+                            </div>
+                        {:then _}
                             {#if posts.length > 0}
                                 <div class="column is-full">
                                     <PostGallery {posts} />
@@ -178,58 +173,9 @@
                             {/if}
 
                             <div class="column is-full">
-                                <nav
-                                    class="pagination is-centered"
-                                    aria-label="pagination"
-                                >
-                                    <a
-                                        href={null}
-                                        onclick={() => changePage(page - 1)}
-                                        class="pagination-previous"
-                                        class:is-disabled={page == 1}
-                                        >Previous</a
-                                    >
-                                    <a
-                                        href={null}
-                                        onclick={() => changePage(page + 1)}
-                                        class="pagination-next"
-                                        class:is-disabled={page >= totalPages}
-                                        >Next</a
-                                    >
-                                    <ul class="pagination-list">
-                                        {#each pagination as pageEntry}
-                                            {#if pageEntry == "..."}
-                                                <li>
-                                                    <span
-                                                        class="pagination-ellipsis"
-                                                        >&hellip;</span
-                                                    >
-                                                </li>
-                                            {:else}
-                                                <li>
-                                                    <a
-                                                        href={null}
-                                                        onclick={() =>
-                                                            changePage(
-                                                                pageEntry,
-                                                            )}
-                                                        class="pagination-link"
-                                                        class:is-current={page ==
-                                                            pageEntry}
-                                                        aria-label="Goto page {pageEntry}"
-                                                        >{pageEntry}</a
-                                                    >
-                                                </li>
-                                            {/if}
-                                        {/each}
-                                    </ul>
-                                </nav>
+                                <Pagination {page} {changePage} {totalPages} />
                             </div>
-                        {:else}
-                            <div class="column">
-                                <div class="skeleton-block"></div>
-                            </div>
-                        {/if}
+                        {/await}
                     </div>
                 </div>
             </div>

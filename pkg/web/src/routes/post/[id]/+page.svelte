@@ -11,7 +11,9 @@
     import DeletePostPanel from "$lib/components/panels/DeletePostPanel.svelte";
     const { id } = $page.params;
 
-    let post: any = $state();
+    let post: PostGetResponse | null = $state(null);
+    let loading: LoadingState = $state();
+
     const getData = async () => {
         post = null;
         const data = await getPost({ id });
@@ -20,37 +22,30 @@
     };
     let isOriginal = $state(false);
 
-    const trimUrl = (str: string) => {
-        if (str.length > 30) {
-            return str.substring(0, 30) + "...";
-        }
-        return str;
-    };
-
     let deleteMenuShown = $state(false);
 
     const onSubmitEdit = () => {
-        getData();
+        loading = getData();
         editMenuShown = false;
     };
     onMount(() => {
-        getData();
+        loading = getData();
     });
 
-    const onDelete = async (success) => {
+    const onDelete = async (success: boolean) => {
         if (success) {
             goto("/posts");
         }
     };
 
-    const toggleDeleteMenu = (e) => {
+    const toggleDeleteMenu = (e: Event) => {
         e.preventDefault();
         deleteMenuShown = !deleteMenuShown;
     };
 
     let editMenuShown = $state(false);
 
-    const toggleEditMenu = (e) => {
+    const toggleEditMenu = (e: Event) => {
         e.preventDefault();
         editMenuShown = !editMenuShown;
     };
@@ -62,108 +57,115 @@
     <div class="container">
         <div class="columns">
             <div class="column is-one-third">
-                {#if post}
-                    <div class="block">
-                        <ViewPostPanel {post} />
-                    </div>
-                    {#if editMenuShown == true && deleteMenuShown == false}
-                        <div class="block">
-                            <EditPostPanel
-                                bind:isActive={editMenuShown}
-                                {post}
-                                onSubmit={onSubmitEdit}
-                            />
-                        </div>
-                    {:else if deleteMenuShown == true}
-                        <DeletePostPanel
-                            id={post.id}
-                            {toggleDeleteMenu}
-                            {onDelete}
-                        />
-                    {:else}
-                        <AuthCheck>
-                            <div class="panel is-info">
-                                <div class="panel-heading">Post Actions</div>
-
-                                {#if post.width > 1000}
-                                    {#if isOriginal == true}
-                                        <a
-                                            href={"#"}
-                                            class="panel-block"
-                                            onclick={() => {
-                                                isOriginal = false;
-                                            }}>View Smaller</a
-                                        >
-                                    {:else}
-                                        <a
-                                            href={"#"}
-                                            class="panel-block"
-                                            onclick={() => {
-                                                isOriginal = true;
-                                            }}>View Original</a
-                                        >
-                                    {/if}
-                                {/if}
-                                <a
-                                    class="panel-block"
-                                    href={post.image_path}
-                                    target="_blank">Download Image</a
-                                >
-                                <a
-                                    href={"#"}
-                                    onclick={toggleEditMenu}
-                                    class="panel-block">Edit</a
-                                >
-                                <a
-                                    href={"#"}
-                                    onclick={toggleDeleteMenu}
-                                    class="panel-block">Delete</a
-                                >
-                            </div>
-                        </AuthCheck>
-                    {/if}
-                {:else}
+                {#await loading}
                     <div class="skeleton-block"></div>
-                {/if}
+                {:then _}
+                    {#if post}
+                        <div class="block">
+                            <ViewPostPanel {post} />
+                        </div>
+                        {#if editMenuShown == true && deleteMenuShown == false}
+                            <div class="block">
+                                <EditPostPanel
+                                    bind:isActive={editMenuShown}
+                                    {post}
+                                    onSubmit={onSubmitEdit}
+                                />
+                            </div>
+                        {:else if deleteMenuShown == true}
+                            <DeletePostPanel
+                                id={post.id}
+                                {toggleDeleteMenu}
+                                {onDelete}
+                            />
+                        {:else}
+                            <AuthCheck>
+                                <div class="panel is-info">
+                                    <div class="panel-heading">
+                                        Post Actions
+                                    </div>
+
+                                    {#if post.width > 1000}
+                                        {#if isOriginal == true}
+                                            <a
+                                                href={"#"}
+                                                class="panel-block"
+                                                onclick={() => {
+                                                    isOriginal = false;
+                                                }}>View Smaller</a
+                                            >
+                                        {:else}
+                                            <a
+                                                href={"#"}
+                                                class="panel-block"
+                                                onclick={() => {
+                                                    isOriginal = true;
+                                                }}>View Original</a
+                                            >
+                                        {/if}
+                                    {/if}
+                                    <a
+                                        class="panel-block"
+                                        href={post.image_path}
+                                        target="_blank">Download Image</a
+                                    >
+                                    <a
+                                        href={"#"}
+                                        onclick={toggleEditMenu}
+                                        class="panel-block">Edit</a
+                                    >
+                                    <a
+                                        href={"#"}
+                                        onclick={toggleDeleteMenu}
+                                        class="panel-block">Delete</a
+                                    >
+                                </div>
+                            </AuthCheck>
+                        {/if}
+                    {/if}
+                {/await}
             </div>
             <div class="column is-two-thirds">
-                {#if post}
-                    <div class="block">
-                        {#if post.width > 1000 && isOriginal == false}
-                            <div class="notification is-info">
-                                Resized to {imagePercentage} of the original image.
-                                <a
-                                    href={"#"}
-                                    onclick={() => {
-                                        isOriginal = true;
-                                    }}>View original</a
-                                >
-                            </div>
-                            <div class="box">
-                                <figure class="image">
-                                    <ImageView
-                                        alt={post.id}
-                                        src={post.preview_path}
-                                    />
-                                </figure>
-                            </div>
-                        {:else}
-                            <div class="notification is-primary">
-                                Currently viewing original image.
-                            </div>
-                            <div class="box">
-                                <figure class="image">
-                                    <ImageView
-                                        alt={post.id}
-                                        src={post.image_path}
-                                    />
-                                </figure>
-                            </div>
-                        {/if}
-                    </div>
-                {:else}
+                {#await loading}
                     <div class="skeleton-block"></div>
-                {/if}
+                {:then _}
+                    {#if post}
+                        <div class="block">
+                            {#if post.width > 1000 && isOriginal == false}
+                                <div class="notification is-info">
+                                    Resized to {imagePercentage} of the original
+                                    image.
+                                    <a
+                                        href={"#"}
+                                        onclick={() => {
+                                            isOriginal = true;
+                                        }}>View original</a
+                                    >
+                                </div>
+                                <div class="box">
+                                    <figure class="image">
+                                        <ImageView
+                                            alt={post.id}
+                                            src={post.preview_path}
+                                        />
+                                    </figure>
+                                </div>
+                            {:else}
+                                <div class="notification is-primary">
+                                    Currently viewing original image.
+                                </div>
+                                <div class="box">
+                                    <figure class="image">
+                                        <ImageView
+                                            alt={post.id}
+                                            src={post.image_path}
+                                        />
+                                    </figure>
+                                </div>
+                            {/if}
+                        </div>
+                    {/if}
+                {/await}
             </div>
         </div>
     </div>
