@@ -28,7 +28,10 @@
     });
 
     const onPaste = async (e: any) => {
-        file = await handlePaste(e);
+        const pastedFile = await handlePaste(e);
+        if (pastedFile) {
+            file = pastedFile;
+        }
         fileName = "";
         similar = [];
         await handleFileChange();
@@ -157,8 +160,7 @@
                             <button
                                 type="submit"
                                 class="button is-primary is-fullwidth is-outlined"
-                                disabled={uploading != undefined ||
-                                    similarLoading != undefined}>Submit</button
+                                disabled={file == null}>Submit</button
                             >
                         </div>
                     </form>
