@@ -31,10 +31,10 @@
         const pastedFile = await handlePaste(e);
         if (pastedFile) {
             file = pastedFile;
+            fileName = "";
+            similar = [];
+            await handleFileChange();
         }
-        fileName = "";
-        similar = [];
-        await handleFileChange();
     };
 
     const onFileChange = async (e: any) => {
