@@ -17,6 +17,7 @@ func Initialize() {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	db.AutoMigrate(&User{})
+	db.AutoMigrate(&UserToken{})
 	db.AutoMigrate(&TagType{})
 	db.AutoMigrate(&Tag{})
 	db.AutoMigrate(&Blob{})
