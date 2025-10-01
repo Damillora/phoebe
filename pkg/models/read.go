@@ -2,6 +2,9 @@ package models
 
 import "time"
 
+type TokenReadModel struct {
+	RefreshToken string `json:"refreshToken"`
+}
 type PostReadModel struct {
 	ID               string        `json:"id"`
 	ImagePreviewPath string        `json:"preview_path"`

@@ -3,8 +3,6 @@ package app
 import (
 	"net/http"
 
-	"github.com/Damillora/phoebe/pkg/database"
-	"github.com/Damillora/phoebe/pkg/middleware"
 	"github.com/Damillora/phoebe/pkg/models"
 	"github.com/Damillora/phoebe/pkg/services"
 	"github.com/gin-gonic/gin"
@@ -13,12 +11,9 @@ import (
 
 func InitializeAuthRoutes(g *gin.Engine) {
 	g.POST("/api/auth/login", createToken)
-
-	protected := g.Group("/api/auth").Use(middleware.AuthMiddleware())
-	{
-		protected.POST("/token", createTokenLoggedIn)
-	}
+	g.POST("/api/auth/token", createTokenRefresh)
 }
+
 func createToken(c *gin.Context) {
 	var model models.LoginFormModel
 	err := c.ShouldBindJSON(&model)
@@ -45,9 +40,10 @@ func createToken(c *gin.Context) {
 	user := services.Login(model.Username, model.Password)
 
 	if user != nil {
-		token := services.CreateToken(user)
+		token := services.CreateTokenPair(user)
 		c.JSON(http.StatusOK, models.TokenResponse{
-			Token: token,
+			AccessToken:  token.AccessToken,
+			RefreshToken: token.RefreshToken,
 		})
 
 	} else {
@@ -58,20 +54,29 @@ func createToken(c *gin.Context) {
 	}
 }
 
-func createTokenLoggedIn(c *gin.Context) {
-	result, ok := c.Get("user")
-	if ok {
-		user := result.(*database.User)
-		if user != nil {
-			token := services.CreateToken(user)
-			c.JSON(http.StatusOK, models.TokenResponse{
-				Token: token,
-			})
-		}
-	} else {
+func createTokenRefresh(c *gin.Context) {
+	tokenReq := models.TokenReadModel{}
+	c.BindJSON(&tokenReq)
+
+	// Parse takes the token string and a function for looking up the key.
+	// The latter is especially useful if you use multiple keys for your application.
+	// The standard is to use 'kid' in the head of the token to identify
+	// which key to use, but the parsed token (head and claims) is provided
+	// to the callback, providing flexibility.
+	claims, err := services.ValidateRefreshToken(tokenReq.RefreshToken)
+	if err != nil {
 		c.JSON(http.StatusUnauthorized, models.ErrorResponse{
 			Code:    http.StatusUnauthorized,
-			Message: "No authorized user",
+			Message: err.Error(),
 		})
 	}
+	user := services.GetUser(claims["sub"].(string))
+	tokenPair := services.CreateTokenPair(user)
+
+	services.InvalidateRefreshToken(user.ID, tokenReq.RefreshToken)
+
+	c.JSON(http.StatusOK, models.TokenResponse{
+		AccessToken:  tokenPair.AccessToken,
+		RefreshToken: tokenPair.RefreshToken,
+	})
 }

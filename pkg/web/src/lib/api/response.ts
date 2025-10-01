@@ -1,6 +1,7 @@
 //Auth
 interface TokenResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 // User

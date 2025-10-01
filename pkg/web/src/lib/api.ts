@@ -1,11 +1,15 @@
-import { token } from "./stores.js";
+import { access_token, refresh_token } from "./stores.js";
 import { browser } from "$app/environment";
 
 // Stores
 let url: string = (browser && window.location.origin) || "";
-let current_token: string;
-token.subscribe((value) => {
-  current_token = value;
+let current_access: string;
+access_token.subscribe((value) => {
+  current_access = value;
+});
+let current_refresh: string;
+refresh_token.subscribe((value) => {
+  current_refresh = value;
 });
 let currentFetch = fetch;
 
@@ -20,7 +24,9 @@ export async function login({ username, password }: LoginRequest) {
     }),
   });
   const data: TokenResponse = await response.json();
-  token.set(data.token);
+  access_token.set(data.accessToken);
+  refresh_token.set(data.refreshToken);
+
   return data;
 }
 
@@ -35,7 +41,8 @@ export async function register({ email, username, password }: RegisterRequest) {
     }),
   });
   const data: TokenResponse = await response.json();
-  token.set(data.token);
+  access_token.set(data.accessToken);
+  refresh_token.set(data.refreshToken);
   return data;
 }
 
@@ -44,11 +51,15 @@ export async function updateToken() {
   const response = await currentFetch(endpoint, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
+    body: JSON.stringify({
+      refreshToken: current_refresh,
+    }),
   });
   const data: TokenResponse = await response.json();
-  token.set(data.token);
+  access_token.set(data.accessToken);
+  refresh_token.set(data.refreshToken);
   return data;
 }
 
@@ -145,7 +156,7 @@ export async function uploadBlob({ file }: BlobUploadRequest) {
   const response = await currentFetch(endpoint, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: formData,
   });
@@ -160,7 +171,7 @@ export async function searchBlob({ file }: BlobUploadRequest) {
   const response = await currentFetch(endpoint, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: formData,
   });
@@ -177,7 +188,7 @@ export async function postCreate({
   const response = await currentFetch(endpoint, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: JSON.stringify({
       blob_id,
@@ -194,7 +205,7 @@ export async function postUpdate({ id, source_url, tags }: PostUpdateRequest) {
   const response = await currentFetch(endpoint, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: JSON.stringify({
       source_url,
@@ -210,7 +221,7 @@ export async function postDelete({ id }: PostDeleteRequest) {
   const response = await currentFetch(endpoint, {
     method: "DELETE",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
   });
   return response.status == 200;
@@ -221,7 +232,7 @@ export async function getUserProfile() {
   const response = await currentFetch(endpoint, {
     method: "GET",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
   });
   const data: UserProfileResponse = await response.json();
@@ -233,7 +244,7 @@ export async function updateTagNotes({ id, note }: TagNoteUpdateRequest) {
   const response = await currentFetch(endpoint, {
     method: "PUT",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: JSON.stringify({
       note,
@@ -248,7 +259,7 @@ export async function updateTag({ id, name, tagTypeId }: TagUpdateRequest) {
   const response = await currentFetch(endpoint, {
     method: "PUT",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: JSON.stringify({
       name,
@@ -267,7 +278,7 @@ export async function updateUserProfile({
   const response = await currentFetch(endpoint, {
     method: "PUT",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: JSON.stringify({
       email,
@@ -285,7 +296,7 @@ export async function updateUserPassword({
   const response = await currentFetch(endpoint, {
     method: "PUT",
     headers: {
-      Authorization: "Bearer " + current_token,
+      Authorization: "Bearer " + current_access,
     },
     body: JSON.stringify({
       old_password,

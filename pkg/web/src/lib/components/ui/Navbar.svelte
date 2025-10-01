@@ -1,13 +1,13 @@
 <script>
     import logo from "$lib/assets/phoebe-logo.svg";
-    import { token } from "$lib/stores";
+    import { access_token } from "$lib/stores";
     import { isTokenExpired, getUsernameFromToken } from "$lib/login-check";
+    import { get } from "svelte/store";
     let menu_shown = $state(false);
     let user_menu_shown = $state(false);
-
     let loggedIn = $state(false);
     let username = $state("");
-    token.subscribe((value) => {
+    access_token.subscribe(async (value) => {
         loggedIn = !isTokenExpired(value);
         username = getUsernameFromToken(value);
     });

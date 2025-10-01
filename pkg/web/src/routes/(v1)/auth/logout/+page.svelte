@@ -1,10 +1,10 @@
 <script>
-    import { token } from "$lib/stores";
+    import { access_token } from "$lib/stores";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
     onMount(() => {
-        token.set("");
+        access_token.set("");
         goto("/");
     });
 </script>

@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { token } from "$lib/stores";
+    import { access_token } from "$lib/stores";
     import { isTokenExpired } from "$lib/login-check";
     interface Props {
-        children?: import('svelte').Snippet;
+        children?: import("svelte").Snippet;
     }
 
     let { children }: Props = $props();
 
     let loggedIn = $state(false);
-    token.subscribe((value) => {
+    access_token.subscribe((value) => {
         loggedIn = !isTokenExpired(value);
     });
 </script>

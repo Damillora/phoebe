@@ -1,11 +1,11 @@
 <script>
-    import { token } from "$lib/stores";
+    import { access_token } from "$lib/stores";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import { isTokenExpired } from "$lib/login-check";
 
     let loggedIn = false;
-    token.subscribe((value) => {
+    access_token.subscribe((value) => {
         loggedIn = !isTokenExpired(value);
     });
 
