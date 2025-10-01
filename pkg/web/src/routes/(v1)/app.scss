@@ -1,7 +1,7 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
 
 // Path to Bulma's sass folder
-@use "../node_modules/bulma/sass/" as * with (
+@use "../../../node_modules/bulma/sass/" as * with (
   $family-primary: '"Nunito", sans-serif',
   $primary: #4c94e8,
 );
@@ -62,12 +62,12 @@
   li {
     @extend .dropdown-item;
     background-color: hsl(var(--bulma-scheme-h), var(--bulma-scheme-s), calc(var(--bulma-scheme-main-l) + var(--bulma-dropdown-item-background-l-delta)));
-    --bulma-dropdown-item-background-l-delta: 0%;    
+    --bulma-dropdown-item-background-l-delta: 0%;
     &:hover, &.focus, &:focus {
       --bulma-dropdown-item-background-l-delta: var(--bulma-hover-background-l-delta);
       --bulma-dropdown-item-border-l-delta: var(--bulma-hover-border-l-delta);
     }
-    
+
     transition-duration: var(--bulma-duration);
     transition-property: background-color, border-color, color;
   }
