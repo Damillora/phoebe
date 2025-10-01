@@ -1,5 +1,4 @@
 <script>
-    import { apiUrl } from "$lib/stores";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
 
@@ -7,11 +6,10 @@
     let loading = $state(false);
     let failed = $state(false);
 
-    let url = get(apiUrl);
 
     onMount(() => {
         const img = new Image();
-        img.src = url + src;
+        img.src = src;
         loading = true;
 
         img.onload = () => {
@@ -27,7 +25,7 @@
 
 {#if !failed}
     <figure class:is-skeleton={loading}>
-        <img src={url + src} {alt} />
+        <img src={src} {alt} />
     </figure>
 {:else}
     <div class="notification is-danger is-light">

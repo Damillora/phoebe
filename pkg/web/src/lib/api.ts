@@ -1,18 +1,13 @@
-import { apiUrl, token } from "./stores.js";
+import { token } from "./stores.js";
 import { browser } from "$app/environment";
-import { isDesktop } from "./desktop-check.js";
-import { fetch as tauriFetch } from "@tauri-apps/plugin-http";
 
 // Stores
 let url: string = (browser && window.location.origin) || "";
-apiUrl.subscribe((value) => {
-  url = value ?? "";
-});
 let current_token: string;
 token.subscribe((value) => {
   current_token = value;
 });
-let currentFetch = isDesktop ? tauriFetch : fetch;
+let currentFetch = fetch;
 
 // Auth
 export async function login({ username, password }: LoginRequest) {

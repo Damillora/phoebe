@@ -2,7 +2,6 @@
     import logo from "$lib/assets/phoebe-logo.svg";
     import { token } from "$lib/stores";
     import { isTokenExpired, getUsernameFromToken } from "$lib/login-check";
-    import { isDesktop } from "$lib/desktop-check";
     let menu_shown = $state(false);
     let user_menu_shown = $state(false);
 
@@ -19,8 +18,6 @@
     const toggleUserMenu = () => {
         user_menu_shown = !user_menu_shown;
     };
-
-    let is_desktop = isDesktop;
 </script>
 
 <nav class="navbar is-primary is-fixed-top" aria-label="main navigation">
@@ -74,11 +71,6 @@
                             Change Password
                         </a>
                         <hr class="navbar-divider" />
-                        {#if is_desktop}
-                            <a href="/desktop/settings" class="navbar-item"
-                                >Desktop Settings</a
-                            >
-                        {/if}
                         <a href="/auth/logout" class="navbar-item">Log out</a>
                     </div>
                 {:else}
@@ -91,12 +83,6 @@
                             Register
                         </a>
                         <a href="/auth/login" class="navbar-item">Log in</a>
-                        {#if is_desktop}
-                            <hr class="navbar-divider" />
-                            <a href="/desktop/settings" class="navbar-item"
-                                >Desktop Settings</a
-                            >
-                        {/if}
                     </div>
                 {/if}
             </div>
