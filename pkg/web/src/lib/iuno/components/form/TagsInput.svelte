@@ -115,6 +115,7 @@
     {/each}
     <input
         type="text"
+        autocomplete="off"
         {name}
         class="outline-none focus-within:outline-none grow min-w-32"
         bind:value={textValue}
