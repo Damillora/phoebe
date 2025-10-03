@@ -1,79 +1,79 @@
 // Auth
-interface RegisterRequest {
+export interface RegisterRequest {
   username: string;
   password: string;
   email: string;
 }
 
-interface LoginRequest {
+export interface LoginRequest {
   username: string;
   password: string;
 }
 
 // User
-interface UserProfileUpdateRequest {
+export interface UserProfileUpdateRequest {
   email: string;
   username: string;
 }
-interface UserPasswordUpdateRequest {
+export interface UserPasswordUpdateRequest {
   old_password: string;
   new_password: string;
 }
 // Tags
-interface TagSearchRequest {
+export interface TagSearchRequest {
   q: string;
   tagtype: string;
   page: number;
   perPage: number;
 }
 
-interface TagGetRequest {
+export interface TagGetRequest {
   tag: string;
 }
 
-interface TagAutocompleteRequest {
+export interface TagAutocompleteRequest {
   tag: string;
   positive?: boolean;
 }
 
-interface TagUpdateRequest {
+export interface TagUpdateRequest {
   id: string;
   name: string;
   tagTypeId: number;
 }
 
-interface TagNoteUpdateRequest {
+export interface TagNoteUpdateRequest {
   id: string;
   note: string;
 }
 
 // Posts
-interface PostListRequest {
+export interface PostListRequest {
   page: number;
   q?: string;
   perPage?: number;
 }
-interface PostGetRequest {
+export interface PostGetRequest {
   id: string;
 }
 
-interface PostCreateRequest {
+export interface PostCreateRequest {
   blob_id: string;
   source_url: string;
   tags: string[];
 }
 
-interface PostUpdateRequest {
+export interface PostUpdateRequest {
   id: string;
   source_url: string;
   tags: string[];
 }
 
-interface PostDeleteRequest {
+export interface PostDeleteRequest {
   id: string;
 }
 
 // Blobs
-interface BlobUploadRequest {
+export interface BlobUploadRequest {
   file: File;
 }

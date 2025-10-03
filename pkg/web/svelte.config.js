@@ -15,9 +15,6 @@ const config = {
     adapter: adapter({
       fallback: "app.html", // may differ from host to host
     }),
-    version: {
-      name: `${process.env.npm_package_version}`,
-    },
   },
 };
 

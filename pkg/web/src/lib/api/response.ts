@@ -1,38 +1,43 @@
 //Auth
-interface TokenResponse {
+export interface TokenResponse {
   accessToken: string;
   refreshToken: string;
 }
+// Error
+export interface ErrorResponse {
+  code: number;
+  message: string;
+}
 
 // User
-interface UserProfileResponse {
+export interface UserProfileResponse {
   email: string;
   username: string;
 }
 
 // Tags
-interface TagListItem {
+export interface TagListItem {
   tagId: string;
   tagName: string;
   tagType: string;
   postCount: number;
 }
 
-interface TagGetResponse {
+export interface TagGetResponse {
   tagId: string;
   tagName: string;
   tagType: string;
   tagNote: string;
-  tagCount: number;
+  postCount: number;
 }
 
-interface TagTypeListItem {
+export interface TagTypeListItem {
   id: number;
   name: string;
 }
 
 // Posts
-interface PostListResponse {
+export interface PostListResponse {
   currentPage: number;
   totalPage: number;
   postCount: number;
@@ -40,13 +45,13 @@ interface PostListResponse {
   tags: TagListItem[];
 }
 
-interface PostListItem {
+export interface PostListItem {
   id: string;
   image_path: string;
   thumbnail_path: string;
 }
 
-interface PostGetResponse {
+export interface PostGetResponse {
   id: string;
   preview_path: string;
   image_path: string;
@@ -58,28 +63,28 @@ interface PostGetResponse {
   upload_date: string;
 }
 
-interface PostCountResponse {
+export interface PostCountResponse {
   postCount: number;
 }
 
-interface PostCreateResponse {
+export interface PostCreateResponse {
   id: string;
   image_path: string;
 }
 
 // Blobs
-interface BlobUploadResponse {
+export interface BlobUploadResponse {
   id: string;
   width: number;
   height: number;
   previewUrl: string;
 }
 
-interface BlobSimilarListResponse {
+export interface BlobSimilarListResponse {
   similar: BlobSimilarListItem[];
 }
 
-interface BlobSimilarListItem {
+export interface BlobSimilarListItem {
   id: string;
   image_path: string;
   thumbnail_path: string;
