@@ -28,20 +28,22 @@
     const onKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
         if (e.key === "ArrowUp") {
             e.preventDefault();
+            let len = autocompleteEntries.length;
             if (selectedAutocomplete === undefined) {
-                selectedAutocomplete = (autocompleteEntries.length + 5 - 1) % 5;
+                selectedAutocomplete = (len + len - 1) % len;
             } else {
-                selectedAutocomplete = (selectedAutocomplete + 5 - 1) % 5;
+                selectedAutocomplete = (selectedAutocomplete + len - 1) % len;
             }
             return;
         } else if (e.key === "ArrowDown") {
             e.preventDefault();
+            let len = autocompleteEntries.length;
             if (selectedAutocomplete === undefined) {
                 console.log("up");
                 selectedAutocomplete = 0;
             } else {
                 console.log("up");
-                selectedAutocomplete = (selectedAutocomplete + 1) % 5;
+                selectedAutocomplete = (selectedAutocomplete + 1) % len;
             }
             return;
         }
