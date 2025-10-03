@@ -196,14 +196,6 @@
                             {/if}
                         {/await}
                     </div>
-                    {#await uploading}
-                        <div
-                            class="mb-4 h-24 w-full p-4 flex flex-col items-center justify-center bg-green-100 rounded-lg cursor-pointer center border-dashed border-1 border-blue-800 transition-colors"
-                        >
-                            <span class="font-medium text-lg">Uploading...</span
-                            >
-                        </div>
-                    {/await}
                 {/if}
                 {#if file}
                     <Button class="w-full" primary type="submit">Submit</Button>
@@ -214,7 +206,7 @@
             <div class="mx-4 my-2">
                 {#await uploading}
                     <div
-                        class="p-4 bg-blue-100 rounded-lg flex flex-col md:flex-row items-center"
+                        class="mb-4 p-4 bg-green-100 rounded-lg flex flex-col md:flex-row items-center"
                     >
                         <span class="mr-2 grow mb-4 md:mb-0">
                             Uploading your image...</span
