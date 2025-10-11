@@ -20,7 +20,7 @@
     "eslint": "^9.34.0",
     "eslint-plugin-svelte": "^3.12.4",
     "svelte": "^5.39.3",
-    "svelte-check": "^4.0.0",
+    "svelte-check": "^4.3.3",
     "tslib": "^2.4.1",
     "typescript": "^5.9.2",
     "vite": "npm:rolldown-vite@latest",
