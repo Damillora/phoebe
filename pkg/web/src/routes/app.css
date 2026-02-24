@@ -1,5 +1,2 @@
-@import "tailwindcss";
-
-@theme {
-    --font-sans: "Urbanist", sans-serif;
-}
+@import "@damillora/iuno/app.css";
+@source "../../node_modules/@damillora/iuno";

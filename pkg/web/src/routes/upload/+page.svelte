@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import LocalImage from "$lib/iuno/components/image/LocalImage.svelte";
     import { handlePaste } from "$lib/utils/paste";
     import { readFileAsDataUrl } from "$lib/utils/files";
     import type {
@@ -9,12 +8,15 @@
     } from "$lib/api/response";
     import type { ChangeEventHandler } from "svelte/elements";
     import { postCreate, searchBlob, uploadBlob } from "$lib/api/client";
-    import Button from "$lib/iuno/components/form/Button.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
-    import TagsInput from "$lib/iuno/components/form/TagsInput.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import ContainerWithSidebar from "$lib/iuno/components/layout/ContainerWithSidebar.svelte";
-    import Label from "$lib/iuno/components/form/Label.svelte";
+    import {
+        Button,
+        TextInput,
+        TagsInput,
+        Input,
+        ContainerWithSidebar,
+        Label,
+        LocalImage,
+    } from "@damillora/iuno";
     import { onAutocompletePositive } from "$lib/utils/autocomplete.js";
     let { data } = $props();
     // Auth guard

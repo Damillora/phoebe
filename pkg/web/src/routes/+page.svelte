@@ -1,12 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import logo from "$lib/assets/phoebe-logo.svg";
-    import Button from "$lib/iuno/components/form/Button.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import InputButton from "$lib/iuno/components/form/InputButton.svelte";
-    import TagsInput from "$lib/iuno/components/form/TagsInput.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
-    import ScreenCenteredContainer from "$lib/iuno/components/layout/ScreenCenteredContainer.svelte";
+    import {
+        Input,
+        InputButton,
+        TagsInput,
+        ScreenCenteredContainer,
+    } from "@damillora/iuno";
     import { onAutocomplete } from "$lib/utils/autocomplete";
     import type { PageProps } from "./$types";
 

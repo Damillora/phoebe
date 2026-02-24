@@ -1,6 +1,6 @@
 <script lang="ts">
     import { postDelete } from "$lib/api/client";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
+    import { NavButton } from "@damillora/iuno";
 
     let { id, onModeChange, onSubmit } = $props();
     let deleteLoading: LoadingState = $state();

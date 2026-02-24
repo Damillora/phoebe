@@ -2,13 +2,13 @@
     import { goto } from "$app/navigation";
     import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
     import TagTypeIndicator from "$lib/components/TagTypeIndicator.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import InputButton from "$lib/iuno/components/form/InputButton.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
-    import ContainerWithSidebar from "$lib/iuno/components/layout/ContainerWithSidebar.svelte";
-    import Tabs from "$lib/iuno/components/layout/Tabs.svelte";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
-    import Pagination from "$lib/iuno/components/nav/Pagination.svelte";
+    import {
+        Input,
+        InputButton,
+        TextInput,
+        ContainerWithSidebar,
+        Pagination,
+    } from "@damillora/iuno";
 
     let { data } = $props();
 

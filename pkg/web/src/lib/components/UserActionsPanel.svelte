@@ -1,5 +1,5 @@
 <script>
-    import NavLink from "$lib/iuno/components/nav/NavLink.svelte";
+    import { NavLink } from "@damillora/iuno";
     import { page } from "$app/state";
 </script>
 

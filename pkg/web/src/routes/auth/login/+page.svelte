@@ -1,11 +1,13 @@
 <script lang="ts">
     import { login } from "$lib/api/client";
     import { goto } from "$app/navigation";
-    import ScreenCenteredContainer from "$lib/iuno/components/layout/ScreenCenteredContainer.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
-    import Button from "$lib/iuno/components/form/Button.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import Label from "$lib/iuno/components/form/Label.svelte";
+    import {
+        ScreenCenteredContainer,
+        TextInput,
+        Button,
+        Input,
+        Label,
+    } from "@damillora/iuno";
     let form = $state({
         username: "",
         password: "",

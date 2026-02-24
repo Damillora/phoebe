@@ -1,9 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { updateTagNotes } from "$lib/api/client";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
-    import Label from "$lib/iuno/components/form/Label.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
+    import { NavButton, Label, Input } from "@damillora/iuno";
 
     let { tag, onModeChange, onSubmit } = $props();
 

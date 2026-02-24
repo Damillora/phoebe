@@ -4,10 +4,7 @@
     import { getTagTypes, updateTag } from "$lib/api/client";
     import { goto } from "$app/navigation";
     import type { TagTypeListItem } from "$lib/api/response";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
-    import Label from "$lib/iuno/components/form/Label.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
+    import { NavButton, Label, Input, TextInput } from "@damillora/iuno";
 
     let { tag, onModeChange, onSubmit } = $props();
     let oldTagName = $state(tag.tagName);

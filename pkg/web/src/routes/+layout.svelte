@@ -6,11 +6,8 @@
     import { getUsernameFromToken, isTokenExpired } from "$lib/login-check";
     import { updateToken } from "$lib/api/client";
     import { afterNavigate, beforeNavigate } from "$app/navigation";
-    import Footer from "$lib/iuno/components/layout/Footer.svelte";
-    import Nav from "$lib/iuno/components/nav/Nav.svelte";
-    import NavLink from "$lib/iuno/components/nav/NavLink.svelte";
+    import { Footer, Nav, NavLink, NavDropdown } from "@damillora/iuno";
     import type { LayoutData } from "./$types";
-    import NavDropdown from "$lib/iuno/components/nav/NavDropdown.svelte";
     const tokenUpdate = async () => {
         let refresh = get(refresh_token);
         let access = get(access_token);
@@ -74,7 +71,7 @@
 <svelte:head>
     <title>phoebe</title>
 </svelte:head>
-<div class="min-h-[calc(100vh-4rem)]">
+<div class="min-h-[calc(100vh-4rem)] py-2">
     {@render children?.()}
 </div>
 

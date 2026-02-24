@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { goto, invalidate, invalidateAll } from "$app/navigation";
-    import TagTypeIndicator from "$lib/components/TagTypeIndicator.svelte";
     import TagTypeVariantButton from "./TagTypeVariantButton.svelte";
 
     let {

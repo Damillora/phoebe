@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import Image from "$lib/iuno/components/image/Image.svelte";
+    import { Image } from "@damillora/iuno";
     import { fly } from "svelte/transition";
 
     let { posts = [], class: className = "" } = $props();

@@ -1,11 +1,13 @@
 <script lang="ts">
     import { getTagAutocomplete, postUpdate } from "$lib/api/client";
     import type { TagListItem } from "$lib/api/response";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import Label from "$lib/iuno/components/form/Label.svelte";
-    import TagsInput from "$lib/iuno/components/form/TagsInput.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
+    import {
+        Input,
+        Label,
+        TagsInput,
+        TextInput,
+        NavButton,
+    } from "@damillora/iuno";
     import { onAutocompletePositive } from "$lib/utils/autocomplete";
     import { quadInOut } from "svelte/easing";
     import { fade, fly } from "svelte/transition";

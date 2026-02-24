@@ -1,11 +1,13 @@
 <script lang="ts">
     import { updateToken, updateUserPassword } from "$lib/api/client";
     import UserActionsPanel from "$lib/components/UserActionsPanel.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import Label from "$lib/iuno/components/form/Label.svelte";
-    import TextInput from "$lib/iuno/components/form/TextInput.svelte";
-    import ContainerWithSidebar from "$lib/iuno/components/layout/ContainerWithSidebar.svelte";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
+    import {
+        Input,
+        Label,
+        TextInput,
+        ContainerWithSidebar,
+        NavButton,
+    } from "@damillora/iuno";
     let loading: LoadingState = $state();
     let updated: LoadingState = $state();
 

@@ -5,8 +5,7 @@
         BlobSimilarListResponse,
     } from "$lib/api/response";
     import PostGallery from "$lib/components/PostGallery.svelte";
-    import LocalImage from "$lib/iuno/components/image/LocalImage.svelte";
-    import ContainerWithSidebar from "$lib/iuno/components/layout/ContainerWithSidebar.svelte";
+    import { ContainerWithSidebar } from "@damillora/iuno";
     import { handlePaste } from "$lib/utils/paste";
     import type { ChangeEventHandler } from "svelte/elements";
 

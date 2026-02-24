@@ -5,10 +5,12 @@
     import PostGallery from "$lib/components/PostGallery.svelte";
     import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
     import TagTypeIndicator from "$lib/components/TagTypeIndicator.svelte";
-    import ContainerWithSidebar from "$lib/iuno/components/layout/ContainerWithSidebar.svelte";
-    import Tabs from "$lib/iuno/components/layout/Tabs.svelte";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
-    import NavLink from "$lib/iuno/components/nav/NavLink.svelte";
+    import {
+        ContainerWithSidebar,
+        Tabs,
+        NavButton,
+        NavLink,
+    } from "@damillora/iuno";
 
     let { data } = $props();
 

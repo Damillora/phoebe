@@ -3,13 +3,15 @@
     import PostGallery from "$lib/components/PostGallery.svelte";
     import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
     import TagTypeIndicator from "$lib/components/TagTypeIndicator.svelte";
-    import Input from "$lib/iuno/components/form/Input.svelte";
-    import InputButton from "$lib/iuno/components/form/InputButton.svelte";
-    import LinkButton from "$lib/iuno/components/form/LinkButton.svelte";
-    import TagsInput from "$lib/iuno/components/form/TagsInput.svelte";
-    import ContainerWithSidebar from "$lib/iuno/components/layout/ContainerWithSidebar.svelte";
-    import Tabs from "$lib/iuno/components/layout/Tabs.svelte";
-    import Pagination from "$lib/iuno/components/nav/Pagination.svelte";
+    import {
+        Input,
+        InputButton,
+        LinkButton,
+        TagsInput,
+        ContainerWithSidebar,
+        Tabs,
+        Pagination,
+    } from "@damillora/iuno";
     import { onAutocomplete } from "$lib/utils/autocomplete";
 
     let { data } = $props();

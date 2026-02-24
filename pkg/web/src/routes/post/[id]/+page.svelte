@@ -3,11 +3,7 @@
     import DeletePostPanel from "$lib/components/DeletePostPanel.svelte";
     import EditPostPanel from "$lib/components/EditPostPanel.svelte";
     import TagLinkNumbered from "$lib/components/TagLinkNumbered.svelte";
-    import Button from "$lib/iuno/components/form/Button.svelte";
-    import Image from "$lib/iuno/components/image/Image.svelte";
-    import Tabs from "$lib/iuno/components/layout/Tabs.svelte";
-    import NavButton from "$lib/iuno/components/nav/NavButton.svelte";
-    import NavLink from "$lib/iuno/components/nav/NavLink.svelte";
+    import { Button, Image, Tabs, NavButton, NavLink } from "@damillora/iuno";
     import { format, formatDistanceToNow } from "date-fns";
 
     let { data } = $props();
