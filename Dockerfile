@@ -1,12 +1,12 @@
 # Web client
-FROM node:22-alpine AS node_build
+FROM node:24-alpine AS node_build
 WORKDIR /src
 COPY . .
 WORKDIR /src/pkg/web
 RUN npm ci && npm run build
 
 # Go application
-FROM golang:1.25-alpine AS build
+FROM golang:1.26-alpine AS build
 WORKDIR /go/src/phoebe
 COPY . .
 COPY --from=node_build /src/pkg/web/build/ /go/src/phoebe/pkg/web/build/
