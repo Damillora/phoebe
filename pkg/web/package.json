@@ -13,25 +13,26 @@
   "devDependencies": {
     "@damillora/iuno": "^0.2.1",
     "@sveltejs/adapter-static": "^3.0.10",
-    "@sveltejs/kit": "^2.53.4",
-    "@sveltejs/vite-plugin-svelte": "^6.2.4",
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/node": "^24.9.1",
-    "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.54.0",
-    "eslint": "^10.0.3",
+    "@sveltejs/kit": "^2.55.0",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^25.5.0",
     "eslint-plugin-svelte": "^3.14.0",
-    "svelte": "^5.47.1",
-    "svelte-check": "^4.4.4",
+    "oxlint": "^1.56.0",
+    "svelte": "^5.53.12",
+    "svelte-check": "^4.4.5",
     "tailwindcss": "^4.1.18",
     "tslib": "^2.4.1",
     "typescript": "^5.9.2",
-    "vite": "^7.3.1"
+    "vite": "^8.0.0"
   },
   "type": "module",
   "dependencies": {
     "child_process": "^1.0.2",
     "date-fns": "^4.1.0",
     "query-string": "^9.1.1"
+  },
+  "overrides": {
+    "vite": "^8.0.0"
   }
 }
