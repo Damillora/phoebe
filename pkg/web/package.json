@@ -19,7 +19,7 @@
     "@types/node": "^25.5.0",
     "eslint-plugin-svelte": "^3.16.0",
     "oxlint": "^1.59.0",
-    "svelte": "^5.55.0",
+    "svelte": "^5.55.4",
     "svelte-check": "^4.4.6",
     "tailwindcss": "^4.1.18",
     "tslib": "^2.4.1",
