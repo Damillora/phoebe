@@ -17,7 +17,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.5.0",
-    "eslint-plugin-svelte": "^3.16.0",
+    "eslint-plugin-svelte": "^3.17.0",
     "oxlint": "^1.59.0",
     "svelte": "^5.55.0",
     "svelte-check": "^4.4.6",
