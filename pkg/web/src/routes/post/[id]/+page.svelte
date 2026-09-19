@@ -33,7 +33,7 @@
     <div class="w-full lg:w-1/3 2xl:w-1/4 flex flex-col">
         <div>
             {#await data.postData then response}
-                <Tabs class="mx-4" tabs={["Tags", "Information", "Actions"]}>
+                <Tabs class="mx-4 my-2" tabs={["Tags", "Information", "Actions"]}>
                     {#snippet contents(sidebarTab: number)}
                         {#if sidebarTab === 0}
                             {#if response.post.tags}

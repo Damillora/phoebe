@@ -58,7 +58,7 @@
                         User Profile
                     </div>
                     <div class="bg-gray-100 rounded-lg">
-                        <NavButton class="mr-1" type="submit">Edit</NavButton>
+                        <NavButton type="submit">Edit</NavButton>
                     </div>
                 </div>
                 {#if updated}

@@ -39,7 +39,7 @@
                         Change Password
                     </div>
                     <div class="bg-gray-100 rounded-lg">
-                        <NavButton class="mr-1" type="submit">Change</NavButton>
+                        <NavButton type="submit">Change</NavButton>
                     </div>
                 </div>
                 {#if updated}

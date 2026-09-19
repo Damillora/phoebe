@@ -111,7 +111,7 @@
             <p>Loading...</p>
         {:then response}
             <Tabs
-                margin={false}
+                class="mx-4 my-2"
                 tabs={["Posts", ...(data.tagInfo ? ["Tag"] : [])]}
             >
                 {#snippet contents(n: number)}

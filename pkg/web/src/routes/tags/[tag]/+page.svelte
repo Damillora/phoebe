@@ -44,7 +44,7 @@
     {#snippet sidebar()}
         {#await data.tagData then responseTagData}
             {#if responseTagData}
-                <Tabs tabs={["Related Tags", "Actions"]}>
+                <Tabs class="mx-4 my-2" tabs={["Related Tags", "Actions"]}>
                     {#snippet contents(n: number)}
                         {#if n === 0}
                             {#await data.tags then responseTags}

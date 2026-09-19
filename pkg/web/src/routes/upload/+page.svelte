@@ -235,9 +235,7 @@
                     <div
                         class="p-4 bg-blue-100 rounded-lg flex flex-col md:flex-row items-center"
                     >
-                        <span class="mr-2 grow mb-4 md:mb-0">
-                            Your image will appear as a preview here.</span
-                        >
+                        Your image will appear as a preview here.
                     </div>
                 {/if}
             </div>{/snippet}
